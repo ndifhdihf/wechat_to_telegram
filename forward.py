@@ -26,5 +26,5 @@ def text_reply(msg):
 def text_reply(msg):
 	debug_group.send_message('%s send wechat message: %s' % (msg.User.NickName, msg.text))
 
-itchat.auto_login(enableCmdQR=True, hotReload=True)
+itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
