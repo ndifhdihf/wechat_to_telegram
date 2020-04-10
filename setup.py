@@ -10,6 +10,7 @@ def setup():
 		return 
 	addtional_arg = ' '.join(sys.argv[1:])
 	command = 'python3 -u forward.py %s' % addtional_arg
+	os.system('touch nohup.out')
 	os.system('nohup %s & tail -F nohup.out' % command)
 
 if __name__ == '__main__':
