@@ -15,10 +15,10 @@ channel = bot.get_chat('@web_record')
 def onMessage(message):
     print(message)
 
-Wechaty.instance() // Global Instance
-    .on('scan', lambda qrcode, status : print('Scan QR Code to login: {}\nhttps://api.qrserver.com/v1/create-qr-code/?data={}'.format(status, encodeURIComponent(qrcode))))
+Wechaty.instance()
+    .on('scan', lambda qrcode, status : print(qrcode))
     .on('login', lambda user: print('User {} logined'.format(user)))
-    .on('message', lambda message: onMessage(message))
+    .on('message', onMessage
     .start()
 
 
