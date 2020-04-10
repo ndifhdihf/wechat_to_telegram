@@ -10,10 +10,7 @@ def setup():
 		return 
 	addtional_arg = ' '.join(sys.argv[1:])
 	command = 'python3 -u daily_summary.py %s' % addtional_arg
-	if 'debug' in addtional_arg or 'once' in addtional_arg:
-		os.system(command + ' test')
-	else:
-		os.system('nohup %s &' % command)
+	os.system('nohup %s & && tail -F nohup.out' % command)
 
 if __name__ == '__main__':
 	setup()
