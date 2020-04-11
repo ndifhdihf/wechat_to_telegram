@@ -21,13 +21,13 @@ link_status = {}
 def text_reply_imp(msg):
 	if not msg.Url:
 		return
-	if link_status[msg.Title] >= 1:
+	if link_status[msg.FileName] >= 1:
 		return # sent before
 	if matchKey(msg.User.NickName, ['女权', '平权', 'hardcore', 'dykes']):
-		link_status[msg.Title] += 1
+		link_status[msg.FileName] += 1
 	else:
-		link_status[msg.Title] += 0.5
-	if link_status[msg.Title] >= 1:
+		link_status[msg.FileName] += 0.5
+	if link_status[msg.FileName] >= 1:
 		channel.send_message(msg.Url)
 
 @itchat.msg_register(SHARING, isGroupChat=True)
