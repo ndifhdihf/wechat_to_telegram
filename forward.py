@@ -6,7 +6,7 @@ import itchat
 import time
 from itchat.content import *
 import yaml
-from telegram_util import matchKey
+from telegram_util import matchKey, log_on_fail
 
 def getFile(name):
 	with open(name) as f:
@@ -15,14 +15,24 @@ def getFile(name):
 bot = Updater(getFile('credential')['bot_token'], use_context=True).bot
 debug_group = bot.get_chat(-1001198682178)
 channel = bot.get_chat('@web_record')
+link_status = {}
+
+@log_on_fail(debug_group)
+def text_reply_imp(msg):
+	if not msg.Url:
+		return
+	if link_status[msg.Title] >= 1:
+		return # sent before
+	if matchKey(msg.User.NickName, ['女权', '平权', 'hardcore', 'dykes']):
+		link_status[msg.Title] += 1
+	else:
+		link_status[msg.Title] += 0.5
+	if link_status[msg.Title] >= 1:
+		channel.send_message(msg.Url)
 
 @itchat.msg_register(SHARING, isGroupChat=True)
 def text_reply(msg):
-	if not matchKey(msg.User.NickName, ['女权', '平权', 'hardcore', 'dykes']):
-		return
-	print(msg)
-	# TODO: dedup
-	channel.send_message(msg.Url)
+	text_reply_imp(msg)
 
 @itchat.msg_register(TEXT, isFriendChat=True)
 def text_reply(msg):
