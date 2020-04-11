@@ -20,6 +20,7 @@ channel = bot.get_chat('@web_record')
 def text_reply(msg):
 	if not matchKey(msg.User.NickName, ['女权', '平权', 'hardcore', 'dykes']):
 		return
+	print(msg)
 	channel.send_message(msg.Url)
 
 @itchat.msg_register(TEXT, isFriendChat=True)
