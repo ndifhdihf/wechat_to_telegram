@@ -21,6 +21,7 @@ def text_reply(msg):
 	if not matchKey(msg.User.NickName, ['女权', '平权', 'hardcore', 'dykes']):
 		return
 	print(msg)
+	# TODO: dedup
 	channel.send_message(msg.Url)
 
 @itchat.msg_register(TEXT, isFriendChat=True)
