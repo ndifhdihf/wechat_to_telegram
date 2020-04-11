@@ -21,7 +21,7 @@ link_status = {}
 def text_reply_imp(msg):
 	if not msg.Url:
 		return
-	if link_status[msg.FileName] >= 1:
+	if link_status.get(msg.FileName, 0) >= 1:
 		return # sent before
 	if matchKey(msg.User.NickName, ['女权', '平权', 'hardcore', 'dykes']):
 		link_status[msg.FileName] += 1
