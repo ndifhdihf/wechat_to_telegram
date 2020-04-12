@@ -18,7 +18,7 @@ channel = bot.get_chat('@web_record')
 link_status = {}
 
 @log_on_fail(debug_group)
-def text_reply_imp(msg):
+def handle_group(msg):
 	if not msg.Url:
 		return
 	link_status[msg.FileName] = link_status.get(msg.FileName, 0)
@@ -32,12 +32,28 @@ def text_reply_imp(msg):
 		channel.send_message(msg.Url)
 
 @itchat.msg_register(SHARING, isGroupChat=True)
-def text_reply(msg):
-	text_reply_imp(msg)
+def group(msg):
+	handle_group(msg)
 
-@itchat.msg_register(TEXT, isFriendChat=True)
-def text_reply(msg):
-	debug_group.send_message('%s send wechat message: %s' % (msg.User.NickName, msg.text))
+@itchat.msg_register([TEXT, SHARING], isFriendChat=True)
+def friend(msg):
+	# TODO: muted friend don't send
+	print(msg)
+	debug_group.send_message('%s: %s' % (msg.User.NickName, msg.Url or msg.text))
+
+@itchat.msg_register([PICTURE])
+def pic(msg):
+	print(msg)
+    msg.download(msg.fileName)
+    debug_group.send_photo(msg.fileName, cap=msg.User.NickName)
+    os.system('rm ' + msg.fileName)
+
+@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+def file(msg):
+	print(msg)
+    msg.download(msg.fileName)
+    debug_group.send_document(msg.fileName, cap=msg.User.NickName)
+    os.system('rm ' + msg.fileName)
 
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
