@@ -16,7 +16,8 @@ link_status = {}
 contact = Contact()
 
 @log_on_fail(debug_group)
-def handle_group(msg):
+@itchat.msg_register(SHARING, isGroupChat=True)
+def group(msg):
 	if not msg.Url:
 		return
 	link_status[msg.FileName] = link_status.get(msg.FileName, 0)
@@ -29,14 +30,12 @@ def handle_group(msg):
 	if link_status[msg.FileName] >= 1:
 		channel.send_message(msg.Url)
 
-@itchat.msg_register(SHARING, isGroupChat=True)
-def group(msg):
-	handle_group(msg)
-
 @log_on_fail(debug_group)
-@itchat.msg_register([TEXT, SHARING], isFriendChat=True)
+@itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
+	ATTACHMENT, VIDEO], isFriendChat=True)
 def friend(msg):
-	# TODO: muted friend don't send
+	if 'mute' in msg.UserRemarkName:
+		return
 	print(msg)
 	if getFile('credential')['me'] in msg.FromUserName:
 		recieve_type = 'to'
@@ -44,28 +43,17 @@ def friend(msg):
 	else:
 		recieve_type = 'from'
 		other = msg.FromUserName
-	debug_group.send_message('%s %s: %s' % (recieve_type, msg.User.NickName, 
-		msg.Url or msg.text))
+	cap = '%s %s' % (recieve_type, msg.User.NickName)
+	if msg.type == TEXT:
+		debug_group.send_message('%s: %s' % (cap, msg.Url or msg.text))
+	elif:
+		msg.download(msg.fileName)
+		if msg.type == PICTURE:
+			debug_group.send_photo(msg.fileName, cap=cap, timeout = 20 * 60)
+		else:
+			debug_group.send_document(msg.fileName, cap=cap, timeout = 20 * 60)
+		os.system('rm ' + msg.fileName)
 	contact.add(msg.User.NickName, other)
-	raise Exception('test exception')
-
-@log_on_fail(debug_group)
-@itchat.msg_register([PICTURE], isFriendChat=True)
-def pic(msg):
-	# not tested, test until legitimate use case
-	print(msg)
-	msg.download(msg.fileName)
-	debug_group.send_photo(msg.fileName, cap=msg.User.NickName)
-	os.system('rm ' + msg.fileName)
-
-@log_on_fail(debug_group)
-@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO], isFriendChat=True)
-def file(msg):
-	# not tested, test until legitimate use case
-	print(msg)
-	msg.download(msg.fileName)
-	debug_group.send_document(msg.fileName, cap=msg.User.NickName)
-	os.system('rm ' + msg.fileName)
 
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
