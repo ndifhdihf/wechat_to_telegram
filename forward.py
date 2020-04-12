@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from telegram.ext import Updater
+from telegram.ext import Updater, MessageHandler, Filters
 import itchat
 import time
 from itchat.content import *
