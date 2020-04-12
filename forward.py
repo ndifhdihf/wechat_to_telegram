@@ -6,8 +6,8 @@ import itchat
 import time
 from itchat.content import *
 from telegram_util import matchKey, log_on_fail
-from common import getFile
-from contact import Contact
+from .common import getFile
+from .contact import Contact
 
 bot = Updater(getFile('credential')['bot_token'], use_context=True).bot
 debug_group = bot.get_chat(-1001198682178)
