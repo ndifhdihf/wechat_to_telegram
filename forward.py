@@ -33,6 +33,7 @@ def handle_group(msg):
 def group(msg):
 	handle_group(msg)
 
+@log_on_fail(debug_group)
 @itchat.msg_register([TEXT, SHARING], isFriendChat=True)
 def friend(msg):
 	# TODO: muted friend don't send
@@ -47,6 +48,7 @@ def friend(msg):
 		msg.Url or msg.text))
 	contact.add(msg.User.NickName, other)
 
+@log_on_fail(debug_group)
 @itchat.msg_register([PICTURE], isFriendChat=True)
 def pic(msg):
 	# not tested, test until legitimate use case
@@ -55,6 +57,7 @@ def pic(msg):
 	debug_group.send_photo(msg.fileName, cap=msg.User.NickName)
 	os.system('rm ' + msg.fileName)
 
+@log_on_fail(debug_group)
 @itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO], isFriendChat=True)
 def file(msg):
 	# not tested, test until legitimate use case
