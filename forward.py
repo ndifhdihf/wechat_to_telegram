@@ -46,7 +46,7 @@ def friend(msg):
 	cap = '%s %s' % (recieve_type, msg.User.NickName)
 	if msg.type == TEXT:
 		debug_group.send_message('%s: %s' % (cap, msg.Url or msg.text))
-	elif:
+	else:
 		msg.download(msg.fileName)
 		if msg.type == PICTURE:
 			debug_group.send_photo(msg.fileName, cap=cap, timeout = 20 * 60)
