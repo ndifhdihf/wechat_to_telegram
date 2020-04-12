@@ -85,6 +85,8 @@ def bot_group(update, context):
 	itchat.send(msg.text, toUserName=contact.contact[name])
 
 tele.dispatcher.add_handler(MessageHandler(Filters.group, bot_group), group = 3)
+updater.start_polling()
+updater.idle()
 
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
