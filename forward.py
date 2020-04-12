@@ -34,7 +34,7 @@ def group(msg):
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isFriendChat=True)
 def friend(msg):
-	if 'mute' in msg.UserRemarkName:
+	if 'mute' in msg.get('UserRemarkName'):
 		return
 	print(msg)
 	if getFile('credential')['me'] in msg.FromUserName:
