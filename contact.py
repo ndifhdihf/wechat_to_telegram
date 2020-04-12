@@ -14,7 +14,7 @@ class Contact():
 	def add(self, name, wid):
 		if self.contact.get(name) == wid:
 			return
-		self.contect[name] = wid
+		self.contact[name] = wid
 		with open('db/contact', 'a') as f:
 			f.write('\n%s:%s' % (name, wid))
 
