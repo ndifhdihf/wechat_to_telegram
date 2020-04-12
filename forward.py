@@ -10,7 +10,8 @@ from common import getFile
 from contact import Contact
 import os
 
-bot = Updater(getFile('credential')['bot_token'], use_context=True).bot
+tele = Updater(getFile('credential')['bot_token'], use_context=True)
+bot = tele.bot
 debug_group = bot.get_chat(-1001198682178)
 channel = bot.get_chat('@web_record')
 link_status = {}
@@ -57,6 +58,23 @@ def friend(msg):
 			debug_group.send_document(open(msg.fileName, 'rb'), 
 				caption=cap, timeout = 20 * 60)
 		os.system('rm ' + msg.fileName)
+
+@log_on_fail(debug_group)
+def bot_group(update, context):
+	msg = update.message
+	if not msg:
+		return
+	if msg.chat_id != debug_group.id or not msg.text:
+		return
+	r_msg = msg.reply_to_message
+	if not r_msg or not r_msg.text:
+		return
+	name = r_msg.text.split(':')[0].split(' ')[-1]
+	if name not in contact.contact:
+		return
+	itchat.send(msg.text, toUserName=contact.contact[name])
+
+tele.dispatcher.add_handler(MessageHandler(Filters.group, bot_group), group = 3)
 
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
