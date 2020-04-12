@@ -50,9 +50,11 @@ def friend(msg):
 	else:
 		msg.download(msg.fileName)
 		if msg.type == PICTURE:
-			debug_group.send_photo(msg.fileName, cap=cap, timeout = 20 * 60)
+			debug_group.send_photo(open(msg.fileName, 'rb'), 
+				cap=cap, timeout = 20 * 60)
 		else:
-			debug_group.send_document(msg.fileName, cap=cap, timeout = 20 * 60)
+			debug_group.send_document(open(msg.fileName, 'rb'), 
+				cap=cap, timeout = 20 * 60)
 		os.system('rm ' + msg.fileName)
 
 itchat.auto_login(enableCmdQR=2, hotReload=True)
