@@ -39,17 +39,20 @@ def group(msg):
 def friend(msg):
 	# TODO: muted friend don't send
 	print(msg)
+	# TODO: TO vs FROM
 	debug_group.send_message('%s: %s' % (msg.User.NickName, msg.Url or msg.text))
 
-@itchat.msg_register([PICTURE])
+@itchat.msg_register([PICTURE], isFriendChat=True)
 def pic(msg):
+	# not tested, test until legitimate use case
 	print(msg)
     msg.download(msg.fileName)
     debug_group.send_photo(msg.fileName, cap=msg.User.NickName)
     os.system('rm ' + msg.fileName)
 
-@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO])
+@itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO], isFriendChat=True)
 def file(msg):
+	# not tested, test until legitimate use case
 	print(msg)
     msg.download(msg.fileName)
     debug_group.send_document(msg.fileName, cap=msg.User.NickName)
