@@ -61,15 +61,20 @@ def friend(msg):
 
 @log_on_fail(debug_group)
 def bot_group(update, context):
+	print(1)
 	msg = update.message
 	if not msg:
 		return
+	print(2)
 	if msg.chat_id != debug_group.id or not msg.text:
 		return
+	print(3)
 	r_msg = msg.reply_to_message
 	if not r_msg:
 		return
+	print(4)	
 	cap = r_msg.text or r_msg.caption
+	print(cap)
 	if not cap:
 		return
 	name = cap.split(':')[0].split(' ')[-1]
