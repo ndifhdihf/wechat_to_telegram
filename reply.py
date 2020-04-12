@@ -31,6 +31,7 @@ def bot_group(update, context):
 	try:
 		itchat.send(msg.text, toUserName=contact.contact[name])
 	except:
+		print('login: reply.py')
 		itchat.auto_login(enableCmdQR=2, hotReload=True)
 		itchat.send(msg.text, toUserName=contact.contact[name])
 
