@@ -47,6 +47,7 @@ def friend(msg):
 	debug_group.send_message('%s %s: %s' % (recieve_type, msg.User.NickName, 
 		msg.Url or msg.text))
 	contact.add(msg.User.NickName, other)
+	raise Exception('test exception')
 
 @log_on_fail(debug_group)
 @itchat.msg_register([PICTURE], isFriendChat=True)
