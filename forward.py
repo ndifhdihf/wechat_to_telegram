@@ -5,17 +5,15 @@ from telegram.ext import Updater
 import itchat
 import time
 from itchat.content import *
-import yaml
 from telegram_util import matchKey, log_on_fail
-
-def getFile(name):
-	with open(name) as f:
-		return yaml.load(f, Loader=yaml.FullLoader)
+from common import getFile
+from contact import Contact
 
 bot = Updater(getFile('credential')['bot_token'], use_context=True).bot
 debug_group = bot.get_chat(-1001198682178)
 channel = bot.get_chat('@web_record')
 link_status = {}
+contact = Contact()
 
 @log_on_fail(debug_group)
 def handle_group(msg):
@@ -39,8 +37,15 @@ def group(msg):
 def friend(msg):
 	# TODO: muted friend don't send
 	print(msg)
-	# TODO: TO vs FROM
-	debug_group.send_message('%s: %s' % (msg.User.NickName, msg.Url or msg.text))
+	if getFile('credential')['me'] in msg.FromUserName:
+		recieve_type = 'to'
+		other = msg.ToUserName
+	else:
+		recieve_type = 'from'
+		other = msg.FromUserName
+	debug_group.send_message('%s %s: %s' % (recieve_type, msg.User.NickName, 
+		msg.Url or msg.text))
+	contact.add(msg.User.NickName, other)
 
 @itchat.msg_register([PICTURE], isFriendChat=True)
 def pic(msg):
