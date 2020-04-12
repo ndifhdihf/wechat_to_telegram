@@ -8,6 +8,7 @@ from itchat.content import *
 from telegram_util import matchKey, log_on_fail
 from common import getFile
 from contact import Contact
+import os
 
 bot = Updater(getFile('credential')['bot_token'], use_context=True).bot
 debug_group = bot.get_chat(-1001198682178)
@@ -51,10 +52,10 @@ def friend(msg):
 		msg.download(msg.fileName)
 		if msg.type == PICTURE:
 			debug_group.send_photo(open(msg.fileName, 'rb'), 
-				cap=cap, timeout = 20 * 60)
+				caption=cap, timeout = 20 * 60)
 		else:
 			debug_group.send_document(open(msg.fileName, 'rb'), 
-				cap=cap, timeout = 20 * 60)
+				caption=cap, timeout = 20 * 60)
 		os.system('rm ' + msg.fileName)
 
 itchat.auto_login(enableCmdQR=2, hotReload=True)
