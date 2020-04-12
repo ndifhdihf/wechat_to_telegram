@@ -67,11 +67,16 @@ def bot_group(update, context):
 	if msg.chat_id != debug_group.id or not msg.text:
 		return
 	r_msg = msg.reply_to_message
-	if not r_msg or not r_msg.text:
+	if not r_msg:
 		return
-	name = r_msg.text.split(':')[0].split(' ')[-1]
+	cap = r_msg.text or r_msg.caption
+	if not cap:
+		return
+	name = cap.split(':')[0].split(' ')[-1]
+	print(name)
 	if name not in contact.contact:
 		return
+	print(msg.text)
 	itchat.send(msg.text, toUserName=contact.contact[name])
 
 tele.dispatcher.add_handler(MessageHandler(Filters.group, bot_group), group = 3)
