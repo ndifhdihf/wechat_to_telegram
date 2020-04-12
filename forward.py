@@ -46,17 +46,17 @@ def friend(msg):
 def pic(msg):
 	# not tested, test until legitimate use case
 	print(msg)
-    msg.download(msg.fileName)
-    debug_group.send_photo(msg.fileName, cap=msg.User.NickName)
-    os.system('rm ' + msg.fileName)
+	msg.download(msg.fileName)
+	debug_group.send_photo(msg.fileName, cap=msg.User.NickName)
+	os.system('rm ' + msg.fileName)
 
 @itchat.msg_register([PICTURE, RECORDING, ATTACHMENT, VIDEO], isFriendChat=True)
 def file(msg):
 	# not tested, test until legitimate use case
 	print(msg)
-    msg.download(msg.fileName)
-    debug_group.send_document(msg.fileName, cap=msg.User.NickName)
-    os.system('rm ' + msg.fileName)
+	msg.download(msg.fileName)
+	debug_group.send_document(msg.fileName, cap=msg.User.NickName)
+	os.system('rm ' + msg.fileName)
 
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
