@@ -34,16 +34,17 @@ def group(msg):
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isFriendChat=True)
 def friend(msg):
-	if 'mute' in msg.get('UserRemarkName', ''):
+	name = msg.user.get('RemarkName') or msg.User.NickName
+	if 'mute' in name:
 		return
 	print(msg)
 	if getFile('credential')['me'] in msg.FromUserName:
 		recieve_type = 'to'
-		other = msg.ToUserName
+		contact.add(name, msg.ToUserName)
 	else:
 		recieve_type = 'from'
-		other = msg.FromUserName
-	cap = '%s %s' % (recieve_type, msg.User.NickName)
+		contact.add(name, msg.FromUserName)
+	cap = '%s %s' % (recieve_type, name)
 	if msg.type == TEXT:
 		debug_group.send_message('%s: %s' % (cap, msg.Url or msg.text))
 	else:
@@ -53,7 +54,6 @@ def friend(msg):
 		else:
 			debug_group.send_document(msg.fileName, cap=cap, timeout = 20 * 60)
 		os.system('rm ' + msg.fileName)
-	contact.add(msg.User.NickName, other)
 
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
