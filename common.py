@@ -1,5 +1,4 @@
 import yaml
-from common import getFile
 
 def getFile(name):
 	with open(name) as f:
