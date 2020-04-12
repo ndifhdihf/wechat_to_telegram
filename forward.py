@@ -1,17 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from telegram.ext import Updater, MessageHandler, Filters
+from telegram.ext import Updater
 import itchat
-import time
 from itchat.content import *
 from telegram_util import matchKey, log_on_fail
 from common import getFile
 from contact import Contact
 import os
 
-tele = Updater(getFile('credential')['bot_token'], use_context=True)
-bot = tele.bot
+bot = Updater(getFile('credential')['bot_token'], use_context=True).bot
 debug_group = bot.get_chat(-1001198682178)
 channel = bot.get_chat('@web_record')
 link_status = {}
@@ -59,37 +57,5 @@ def friend(msg):
 				caption=cap, timeout = 20 * 60)
 		os.system('rm ' + msg.fileName)
 
-@log_on_fail(debug_group)
-def bot_group(update, context):
-	print(1)
-	msg = update.message
-	if not msg:
-		return
-	print(2)
-	if msg.chat_id != debug_group.id or not msg.text:
-		return
-	print(3)
-	r_msg = msg.reply_to_message
-	if not r_msg:
-		return
-	print(4)	
-	cap = r_msg.text or r_msg.caption
-	print(cap)
-	if not cap:
-		return
-	name = cap.split(':')[0].split(' ')[-1]
-	print(name)
-	if name not in contact.contact:
-		return
-	print(msg.text)
-	itchat.send(msg.text, toUserName=contact.contact[name])
-
-tele.dispatcher.add_handler(MessageHandler(Filters.group, bot_group), group = 3)
-
-print('b')
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
-
-print('a')
-tele.start_polling()
-tele.idle()
