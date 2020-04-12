@@ -11,8 +11,8 @@ def setup():
 		return 
 	addtional_arg = ' '.join(sys.argv[1:])
 	os.system('touch nohup.out')
-	os.system('nohup python3 -u forward.py &' % addtional_arg)
-	os.system('nohup python3 -u reply.py &' % addtional_arg)
+	os.system('nohup python3 -u forward.py %s &' % addtional_arg)
+	os.system('nohup python3 -u reply.py %s &' % addtional_arg)
 	os.system('tail -F nohup.out')
 
 if __name__ == '__main__':
