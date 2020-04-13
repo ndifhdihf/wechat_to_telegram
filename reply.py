@@ -13,6 +13,7 @@ debug_group = bot.get_chat(-1001198682178)
 
 @log_on_fail(debug_group)
 def bot_group(update, context):
+	print('reply1')
 	msg = update.message
 	if not msg:
 		return
@@ -29,6 +30,7 @@ def bot_group(update, context):
 	if name not in contact.contact:
 		return
 	try:
+		print('reply2')
 		itchat.send(msg.text, toUserName=contact.contact[name])
 	except:
 		print('login: reply.py')
