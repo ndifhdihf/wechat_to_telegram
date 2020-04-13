@@ -18,7 +18,7 @@ contact = Contact()
 @log_on_fail(debug_group)
 @itchat.msg_register(SHARING, isGroupChat=True)
 def group(msg):
-	if not msg.Url:
+	if not msg.Url or matchKey(msg.Url, ['waerrpage']):
 		return
 	link_status[msg.FileName] = link_status.get(msg.FileName, 0)
 	if link_status[msg.FileName] >= 1:
