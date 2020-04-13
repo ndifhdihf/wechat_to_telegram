@@ -14,9 +14,10 @@ def setup():
 	os.system('touch nohup.out')
 	print(1)
 	os.system('nohup python3 -u forward.py %s &' % addtional_arg)
-	time.sleep(10)
+	time.sleep(2)
 	print(2)
 	os.system('nohup python3 -u reply.py %s &' % addtional_arg)
+	time.sleep(2)
 	print(3)
 	os.system('tail -F nohup.out')
 
