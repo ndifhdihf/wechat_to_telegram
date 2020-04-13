@@ -22,15 +22,17 @@ def bot_group(update, context):
 	r_msg = msg.reply_to_message
 	if not r_msg:
 		return
+	print('reply2')
 	cap = r_msg.text or r_msg.caption
 	if not cap:
 		return
 	name = cap.split(':')[0].split(' ')[-1]
 	contact = Contact()
+	print('reply3', name, contact.contact)
 	if name not in contact.contact:
 		return
 	try:
-		print('reply2')
+		print('reply4')
 		itchat.send(msg.text, toUserName=contact.contact[name])
 	except:
 		print('login: reply.py')
