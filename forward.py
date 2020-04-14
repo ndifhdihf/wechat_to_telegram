@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ']
+
 from telegram.ext import Updater
 import itchat
 from itchat.content import *
@@ -18,7 +20,7 @@ contact = Contact()
 @log_on_fail(debug_group)
 @itchat.msg_register(SHARING, isGroupChat=True)
 def group(msg):
-	if not msg.Url or matchKey(msg.Url, ['waerrpage']):
+	if not msg.Url or matchKey(msg.Url, BLACKLIST):
 		return
 	link_status[msg.FileName] = link_status.get(msg.FileName, 0)
 	if link_status[msg.FileName] >= 1:
