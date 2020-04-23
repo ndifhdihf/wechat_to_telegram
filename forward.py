@@ -40,6 +40,7 @@ def friend(msg):
 	if 'mute' in name:
 		return
 	print(msg)
+	# Seems bug here
 	if getFile('credential')['me'] in msg.FromUserName:
 		recieve_type = 'to'
 		contact.add(name, msg.ToUserName)

@@ -19,7 +19,8 @@ def setup():
 	os.system('nohup python3 -u reply.py %s &' % addtional_arg)
 	time.sleep(2)
 	print(3)
-	os.system('tail -F nohup.out')
+	if 'notail' not in str(sys.argv):
+		os.system('tail -F nohup.out')
 
 if __name__ == '__main__':
 	setup()
