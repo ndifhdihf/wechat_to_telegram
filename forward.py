@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ']
+BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ', 'Panziye4869', 'Artemis']
 
 from telegram.ext import Updater
 import itchat
