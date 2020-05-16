@@ -33,16 +33,8 @@ def group(msg):
 	if link_status[msg.FileName] >= 1:
 		channel.send_message(msg.Url)
 
-@log_on_fail(debug_group)
-@itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
-	ATTACHMENT, VIDEO], isFriendChat=True)
-def friend(msg):
-	name = msg.user.get('RemarkName') or msg.User.NickName
-	if 'mute' in name:
-		return
-	print(msg)
-	# Seems bug here
-	if getFile('credential')['me'] in msg.FromUserName:
+def forwardToDebugChannel(msg):
+	if 'yunzhi' in msg.FromUserName:
 		recieve_type = 'to'
 		contact.add(name, msg.ToUserName)
 	else:
@@ -61,5 +53,21 @@ def friend(msg):
 				caption=cap, timeout = 20 * 60)
 		os.system('rm ' + msg.fileName)
 
+@log_on_fail(debug_group)
+@itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
+	ATTACHMENT, VIDEO], isFriendChat=True)
+def friend(msg):
+	name = msg.user.get('RemarkName') or msg.User.NickName
+	if 'mute' in name:
+		return
+	forwardToDebugChannel(msg)
+
+@log_on_fail(debug_group)
+@itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
+	ATTACHMENT, VIDEO], isGroupChat=True)
+def pythonGroup(msg):
+	if 'python' in str(msg.User.NickName).lower():
+		forwardToDebugChannel(msg)
+	
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
