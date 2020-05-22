@@ -37,7 +37,7 @@ def forwardToDebugChannel(msg):
 		return
 	print('from user name', msg.FromUserName)
 	print('search friends result', 
-		itchat.search_friends(userName=msg.FromUserName)[0])
+		itchat.search_friends(userName=msg.FromUserName))
 	if 'yunzhi' in msg.User.NickName: # test
 		recieve_type = 'to'
 	else:
