@@ -35,7 +35,7 @@ def forwardToDebugChannel(msg):
 	name = msg.User.get('RemarkName') or msg.User.NickName
 	if 'mute' in name:
 		return
-	if 'yunzhi' in msg.FromUser.NickName:
+	if 'yunzhi' in msg.User.NickName:
 		recieve_type = 'to'
 	else:
 		recieve_type = 'from'
