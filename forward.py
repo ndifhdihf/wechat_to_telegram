@@ -35,9 +35,7 @@ def forwardToDebugChannel(msg):
 	name = msg.User.get('RemarkName') or msg.User.NickName
 	if 'mute' in name:
 		return
-	print('xx', itchat.search_friends(
-		userName=msg.FromUserName).get('NickName'))
-	if 'yunzhi' in itchat.search_friends(
+	if 'unzhi' in itchat.search_friends(
 		userName=msg.FromUserName).get('NickName'): # test
 		recieve_type = 'to'
 	else:
