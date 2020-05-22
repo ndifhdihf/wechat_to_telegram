@@ -33,6 +33,7 @@ def group(msg):
 
 def forwardToDebugChannel(msg):
 	name = msg.User.get('RemarkName') or msg.User.NickName
+	print('name', name)
 	if 'mute' in name:
 		return
 	if 'yunzhi' in msg.User.NickName:
@@ -40,6 +41,7 @@ def forwardToDebugChannel(msg):
 	else:
 		recieve_type = 'from'
 	cap = '%s %s' % (recieve_type, name)
+	print('cap', cap)
 	if msg.type == TEXT:
 		debug_group.send_message('%s: %s' % (cap, msg.Url or msg.text))
 	else:
