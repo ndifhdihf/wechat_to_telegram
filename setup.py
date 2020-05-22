@@ -12,13 +12,10 @@ def setup():
 		return 
 	addtional_arg = ' '.join(sys.argv[1:])
 	os.system('touch nohup.out')
-	print(1)
 	os.system('nohup python3 -u forward.py %s &' % addtional_arg)
 	time.sleep(2)
-	print(2)
 	os.system('nohup python3 -u reply.py %s &' % addtional_arg)
 	time.sleep(2)
-	print(3)
 	if 'notail' not in str(sys.argv):
 		os.system('tail -F nohup.out')
 
