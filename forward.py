@@ -33,11 +33,10 @@ def group(msg):
 
 def forwardToDebugChannel(msg):
 	name = msg.User.get('RemarkName') or msg.User.NickName
-	print('from user', msg.get('FromUser'))
-	print('from', msg.get('from'))
+	print('from user', msg.get('FromUserName'))
 	if 'mute' in name:
 		return
-	if 'yunzhi' in msg.User.NickName:
+	if 'yunzhi' in msg.User.NickName: # test
 		recieve_type = 'to'
 	else:
 		recieve_type = 'from'
