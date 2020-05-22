@@ -9,14 +9,12 @@ import itchat
 from itchat.content import *
 from telegram_util import matchKey, log_on_fail
 from common import getFile
-from contact import Contact
 import os
 
 bot = Updater(getFile('credential')['bot_token'], use_context=True).bot
 debug_group = bot.get_chat(-1001198682178)
 channel = bot.get_chat('@web_record')
 link_status = {}
-contact = Contact()
 
 @log_on_fail(debug_group)
 @itchat.msg_register(SHARING, isGroupChat=True)
@@ -34,12 +32,13 @@ def group(msg):
 		channel.send_message(msg.Url)
 
 def forwardToDebugChannel(msg):
-	if 'yunzhi' in msg.FromUserName:
+	name = msg.User.get('RemarkName') or msg.User.NickName
+	if 'mute' in name:
+		return
+	if 'yunzhi' in msg.FromUser.NickName:
 		recieve_type = 'to'
-		contact.add(name, msg.ToUserName)
 	else:
 		recieve_type = 'from'
-		contact.add(name, msg.FromUserName)
 	cap = '%s %s' % (recieve_type, name)
 	if msg.type == TEXT:
 		debug_group.send_message('%s: %s' % (cap, msg.Url or msg.text))
@@ -57,9 +56,6 @@ def forwardToDebugChannel(msg):
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isFriendChat=True)
 def friend(msg):
-	name = msg.user.get('RemarkName') or msg.User.NickName
-	if 'mute' in name:
-		return
 	forwardToDebugChannel(msg)
 
 @log_on_fail(debug_group)
