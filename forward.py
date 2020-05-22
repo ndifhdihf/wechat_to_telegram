@@ -33,7 +33,7 @@ def group(msg):
 
 def forwardToDebugChannel(msg):
 	name = msg.User.get('RemarkName') or msg.User.NickName
-	print('from user', msg.get('FromUserName'))
+	print('message', msg)
 	if 'mute' in name:
 		return
 	if 'yunzhi' in msg.User.NickName: # test
