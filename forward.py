@@ -19,7 +19,7 @@ link_status = {}
 @log_on_fail(debug_group)
 @itchat.msg_register(SHARING, isGroupChat=True)
 def group(msg):
-	print(msg.Url)
+	print('msg.Url', msg.Url)
 	if not msg.Url or matchKey(msg.Url, BLACKLIST):
 		return
 	link_status[msg.FileName] = link_status.get(msg.FileName, 0)
