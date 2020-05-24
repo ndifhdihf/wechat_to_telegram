@@ -19,6 +19,7 @@ link_status = {}
 @log_on_fail(debug_group)
 @itchat.msg_register(SHARING, isGroupChat=True)
 def group(msg):
+	print(msg.Url)
 	if not msg.Url or matchKey(msg.Url, BLACKLIST):
 		return
 	link_status[msg.FileName] = link_status.get(msg.FileName, 0)
@@ -60,7 +61,7 @@ def friend(msg):
 	forwardToDebugChannel(msg)
 
 @log_on_fail(debug_group)
-@itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
+@itchat.msg_register([TEXT, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isGroupChat=True)
 def pythonGroup(msg):
 	if 'python' in str(msg.User.NickName).lower():
