@@ -12,7 +12,9 @@ debug_group = bot.get_chat(-1001198682178)
 
 def sendMsg(name, text):
 	print(name, text)
-	users = itchat.search_friends(name)
+	users = (itchat.search_friends(name)
+		or itchat.search_friends(remarkName = name)
+		or itchat.search_friends(nickName = name))
 	if not users:
 		debug_group.send_message('No user name: %s' % name)
 		return
