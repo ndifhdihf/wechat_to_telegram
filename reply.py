@@ -21,18 +21,25 @@ def sendMsg(name, text):
 
 @log_on_fail(debug_group)
 def bot_group(update, context):
+	print(1)
 	msg = update.message
 	if not msg:
 		return
+	print(2)
 	if msg.chat_id != debug_group.id or not msg.text:
 		return
+	print(3)
 	r_msg = msg.reply_to_message
+	print(4)
 	if not r_msg:
 		return
+	print(5)
 	cap = r_msg.text or r_msg.caption
 	if not cap:
 		return
+	print(6)
 	name = cap.split(':')[0].split(' ')[-1]
+	print(7, name)
 	try:
 		sendMsg(name, msg.text)
 	except:
