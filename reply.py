@@ -11,10 +11,12 @@ bot = tele.bot
 debug_group = bot.get_chat(-1001198682178)
 
 def sendMsg(name, text):
+	print(name, text)
 	users = itchat.search_friends(name=name)
 	if not users:
 		debug_group.send('No user name: %s' % name)
 		return
+	print(toUserName=users[0]['UserName'])
 	itchat.send(text, toUserName=users[0]['UserName'])
 
 @log_on_fail(debug_group)
