@@ -10,10 +10,9 @@ tele = Updater(getFile('credential')['bot_token'], use_context=True)
 bot = tele.bot
 debug_group = bot.get_chat(-1001198682178)
 
-logged_in = False
-
 def sendMsg(name, text):
 	print(name, text)
+	itchat.auto_login(enableCmdQR=2, hotReload=True)
 	users = (itchat.search_friends(name)
 		or itchat.search_friends(remarkName = name)
 		or itchat.search_friends(nickName = name))
@@ -25,7 +24,6 @@ def sendMsg(name, text):
 
 @log_on_fail(debug_group)
 def bot_group(update, context):
-	global logged_in
 	msg = update.message
 	if not msg:
 		return
@@ -38,9 +36,6 @@ def bot_group(update, context):
 	if not cap:
 		return
 	name = cap.split(':')[0].split(' ')[-1]
-	if not logged_in:
-		itchat.auto_login(enableCmdQR=2, hotReload=True)
-		logged_in = True
 	sendMsg(name, msg.text)
 
 tele.dispatcher.add_handler(MessageHandler(Filters.group, bot_group), group = 3)
