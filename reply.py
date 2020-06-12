@@ -5,14 +5,16 @@ from telegram.ext import Updater, MessageHandler, Filters
 import itchat
 from telegram_util import log_on_fail
 from common import getFile
+import time
 
 tele = Updater(getFile('credential')['bot_token'], use_context=True)
 bot = tele.bot
 debug_group = bot.get_chat(-1001198682178)
 
+last_login_time = 0
+
 def sendMsg(name, text):
 	print(name, text)
-	itchat.auto_login(enableCmdQR=2, hotReload=True)
 	users = (itchat.search_friends(name)
 		or itchat.search_friends(remarkName = name)
 		or itchat.search_friends(nickName = name))
@@ -21,6 +23,7 @@ def sendMsg(name, text):
 		return
 	print(users[0]['UserName'])
 	itchat.send(text, toUserName=users[0]['UserName'])
+	debug_group.send_message('success')
 
 @log_on_fail(debug_group)
 def bot_group(update, context):
@@ -36,6 +39,9 @@ def bot_group(update, context):
 	if not cap:
 		return
 	name = cap.split(':')[0].split(' ')[-1]
+	if time.time() - last_login_time > 60 * 60:
+		itchat.auto_login(enableCmdQR=2, hotReload=True)
+		last_login_time = time.time()
 	sendMsg(name, msg.text)
 
 tele.dispatcher.add_handler(MessageHandler(Filters.group, bot_group), group = 3)
