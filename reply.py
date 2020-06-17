@@ -38,7 +38,7 @@ def bot_group(update, context):
 	cap = r_msg.text or r_msg.caption
 	if not cap:
 		return
-	name = cap.split(':')[0].split(' ')[-1]
+	name = cap.split(':')[0].lstrip('from').lstrip('to').strip()
 	global last_login_time
 	if time.time() - last_login_time > 60 * 60:
 		itchat.auto_login(enableCmdQR=2, hotReload=True)
