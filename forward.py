@@ -25,13 +25,13 @@ def group(msg):
 		return
 	title = getTitle(msg.Url)
 	link_status[title] = link_status.get(title, 0)
-	if link_status[title] >= 1:
+	if link_status[title] >= 2:
 		return # sent before
 	if matchKey(msg.User.NickName, ['女权', '平权', 'hardcore', 'dykes']):
-		link_status[title] += 1
+		link_status[title] += 2
 	else:
-		link_status[title] += 0.5
-	if link_status[title] >= 1:
+		link_status[title] += 1
+	if link_status[title] == 2:
 		channel.send_message(msg.Url)
 
 def forwardToDebugChannel(msg):
