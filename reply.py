@@ -27,7 +27,6 @@ def sendMsg(name, text):
 
 @log_on_fail(debug_group)
 def reply(update, context):
-	print(1)
 	msg = update.message
 	if not msg:
 		return
@@ -40,7 +39,6 @@ def reply(update, context):
 	if not cap:
 		return
 	name = cap.split(':')[0].lstrip('from').lstrip('to').strip()
-	print(name)
 	global last_login_time
 	if time.time() - last_login_time > 60 * 60:
 		itchat.auto_login(enableCmdQR=2, hotReload=True)
