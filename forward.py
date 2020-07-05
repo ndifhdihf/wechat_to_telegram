@@ -12,8 +12,8 @@ from common import getFile
 from export_to_telegraph import getTitle
 import os
 
-bot = Updater(getFile('credential')['bot_token'], use_context=True).bot
-debug_group = bot.get_chat(-1001198682178)
+bot = Updater(getFile('credential')['bot_token'], use_context=True).bot # 
+debug_group = bot.get_chat(420074357)
 channel = bot.get_chat('@web_record')
 link_status = {}
 
