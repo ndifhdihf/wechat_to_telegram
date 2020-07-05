@@ -9,7 +9,7 @@ import time
 
 tele = Updater(getFile('credential')['bot_token'], use_context=True)
 bot = tele.bot
-debug_group = bot.get_chat(-1001198682178)
+debug_group = bot.get_chat(420074357)
 
 last_login_time = 0
 
@@ -26,7 +26,7 @@ def sendMsg(name, text):
 	debug_group.send_message('success')
 
 @log_on_fail(debug_group)
-def bot_group(update, context):
+def reply(update, context):
 	msg = update.message
 	if not msg:
 		return
@@ -45,6 +45,6 @@ def bot_group(update, context):
 		last_login_time = time.time()
 	sendMsg(name, msg.text)
 
-tele.dispatcher.add_handler(MessageHandler(Filters.group, bot_group), group = 3)
+tele.dispatcher.add_handler(MessageHandler(Filters.private, reply), group = 3)
 tele.start_polling()
 tele.idle()
