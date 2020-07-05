@@ -9,6 +9,7 @@ import itchat
 from itchat.content import *
 from telegram_util import matchKey, log_on_fail
 from common import getFile
+from export_to_telegraph import getTitle
 import os
 
 bot = Updater(getFile('credential')['bot_token'], use_context=True).bot
@@ -22,14 +23,15 @@ def group(msg):
 	print('msg.Url', msg.Url)
 	if not msg.Url or matchKey(msg.Url, BLACKLIST):
 		return
-	link_status[msg.FileName] = link_status.get(msg.FileName, 0)
-	if link_status[msg.FileName] >= 1:
+	title = getTitle(msg.Url)
+	link_status[title] = link_status.get(title, 0)
+	if link_status[title] >= 1:
 		return # sent before
 	if matchKey(msg.User.NickName, ['女权', '平权', 'hardcore', 'dykes']):
-		link_status[msg.FileName] += 1
+		link_status[title] += 1
 	else:
-		link_status[msg.FileName] += 0.5
-	if link_status[msg.FileName] >= 1:
+		link_status[title] += 0.5
+	if link_status[title] >= 1:
 		channel.send_message(msg.Url)
 
 def forwardToDebugChannel(msg):
@@ -42,7 +44,7 @@ def forwardToDebugChannel(msg):
 	else:
 		recieve_type = 'from'
 	cap = '%s %s' % (recieve_type, name)
-	if msg.type == TEXT:
+	if msg.type in [TEXT, SHARING]:
 		debug_group.send_message('%s: %s' % (cap, msg.Url or msg.text))
 	else:
 		msg.download(msg.fileName)
@@ -59,13 +61,6 @@ def forwardToDebugChannel(msg):
 	ATTACHMENT, VIDEO], isFriendChat=True)
 def friend(msg):
 	forwardToDebugChannel(msg)
-
-@log_on_fail(debug_group)
-@itchat.msg_register([TEXT, PICTURE, RECORDING, 
-	ATTACHMENT, VIDEO], isGroupChat=True)
-def pythonGroup(msg):
-	if 'python' in str(msg.User.NickName).lower():
-		forwardToDebugChannel(msg)
 	
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
