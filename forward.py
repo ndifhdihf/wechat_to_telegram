@@ -12,11 +12,12 @@ from telegram_util import matchKey, log_on_fail
 from common import getFile
 from export_to_telegraph import getTitle
 import os
+import plain_db
 
 bot = Updater(getFile('credential')['bot_token'], use_context=True).bot # weixin_subscription_bot 
 debug_group = bot.get_chat(420074357)
 channel = bot.get_chat('@web_record')
-link_status = {}
+link_status = plain_db.load('existing')
 
 @log_on_fail(debug_group)
 @itchat.msg_register(SHARING, isGroupChat=True)
@@ -25,14 +26,13 @@ def group(msg):
 	if not msg.Url or matchKey(msg.Url, BLACKLIST):
 		return
 	title = getTitle(msg.Url)
-	link_status[title] = link_status.get(title, 0)
-	if link_status[title] >= 2:
+	if link_status.get(title, 0) >= 2:
 		return # sent before
 	if matchKey(msg.User.NickName, ['女权', '平权', 'hardcore', 'dykes']):
-		link_status[title] += 2
+		link_status.inc(title, 2)
 	else:
-		link_status[title] += 1
-	if link_status[title] == 2:
+		link_status.inc(title, 1)
+	if link_status.get(title) >= 2:
 		channel.send_message(msg.Url)
 
 def forwardToDebugChannel(msg):
