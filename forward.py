@@ -3,7 +3,7 @@
 
 BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ', 'Panziye4869', 'Artemis', 
 	'support.weixin.qq.com', 'volition', 'MzI5NzUxMDU4OQ', '/promo/', 
-	'MzI0ODg4NDM5Mw', 'MzAwNjgzMTQ5NQ']
+	'MzI0ODg4NDM5Mw', 'MzAwNjgzMTQ5NQ', 'MzIyOTQyNDY2OQ']
 
 from telegram.ext import Updater
 import itchat
