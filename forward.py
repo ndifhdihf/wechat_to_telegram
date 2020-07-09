@@ -37,7 +37,8 @@ def group(msg):
 		web_record.send_message(msg.Url)
 
 def forwardToChannel(msg, channel = debug_group):
-	name = msg.User.get('RemarkName') or msg.User.NickName
+	name = (msg.get('ActualNickName') or 
+		msg.User.get('RemarkName') or msg.User.NickName)
 	if 'mute' in name:
 		return
 	result = itchat.search_friends(userName=msg.FromUserName)
@@ -46,7 +47,8 @@ def forwardToChannel(msg, channel = debug_group):
 	else:
 		recieve_type = 'from'
 	cap = '%s %s' % (recieve_type, name)
-	print('msg', msg)
+	if channel.id != debug_group.id:
+		cap = name
 	if msg.type in [TEXT, SHARING]:
 		channel.send_message('%s: %s' % (cap, msg.Url or msg.text))
 	else:
