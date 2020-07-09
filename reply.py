@@ -10,6 +10,7 @@ import time
 tele = Updater(getFile('credential')['bot_token'], use_context=True)
 bot = tele.bot
 debug_group = bot.get_chat(420074357)
+feminism_private_group = bot.get_chat(-428192067)
 
 last_login_time = 0
 
@@ -23,12 +24,18 @@ def sendMsg(name, text):
 	itchat.send(text, toUserName=users[0]['UserName'])
 	debug_group.send_message('success')
 
+def sendToFeminismPrivateGroup(msg):
+	# msg.
+	...
+
 @log_on_fail(debug_group)
 def reply(update, context):
 	msg = update.message
-	if not msg:
+	if not msg or not msg.text:
 		return
-	if msg.chat_id != debug_group.id or not msg.text:
+	if msg.chat_id == feminism_private_group.id:
+		sendToFeminismPrivateGroup(msg)
+	if msg.chat_id != debug_group.id:
 		return
 	r_msg = msg.reply_to_message
 	if not r_msg:

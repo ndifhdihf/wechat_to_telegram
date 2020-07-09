@@ -46,6 +46,7 @@ def forwardToChannel(msg, channel = debug_group):
 	else:
 		recieve_type = 'from'
 	cap = '%s %s' % (recieve_type, name)
+	print('msg', msg)
 	if msg.type in [TEXT, SHARING]:
 		channel.send_message('%s: %s' % (cap, msg.Url or msg.text))
 	else:
