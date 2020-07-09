@@ -73,7 +73,7 @@ def friend(msg):
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isGroupChat=True)
 def groupToTelegram(msg):
-	if not matchKey(msg.User.get('NickName'), ['随记']):
+	if not matchKey(msg.User.get('NickName'), ['女性会客厅']):
 		return
 	forwardToChannel(msg, feminism_private_group)
 	
