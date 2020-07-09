@@ -44,7 +44,7 @@ def sendToFeminismPrivateGroup(msg):
 	if msg.text:
 		text = getPrefix(msg) + msg.text
 		itchat.send(text, chatroom_id)
-		msg.send_message(feminism_private_group.id, text)
+		msg.chat.send_message(feminism_private_group.id, text)
 	elif msg.photo:
 		fn = msg.photo[0].get_file().download('tmp2/')
 		itchat.send_image(fn, toUserName=chatroom_id)
