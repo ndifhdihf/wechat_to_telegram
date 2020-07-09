@@ -3,11 +3,12 @@
 
 from telegram.ext import Updater, MessageHandler, Filters
 import itchat
-from telegram_util import log_on_fail
+from telegram_util import log_on_fail, isUrl
 import cached_url
 from common import getFile
 import time
 import os
+from export_to_telegraph import getTitle
 
 tele = Updater(getFile('credential')['bot_token'], use_context=True)
 bot = tele.bot
@@ -38,12 +39,17 @@ def getPrefix(telegram_msg):
 		return 'From ' + msg.from_user.first_name + ': '
 	return ''
 
+def decorate(text):
+	if isUrl(text) and len(text.split()) == 1:
+		return getTitle(text) + ' ' + text 
+	return text
+
 def sendToFeminismPrivateGroup(msg):
 	chatroom_id = itchat.search_chatrooms(
 		name = wechat_feminism_group_name)[0]['UserName']
 	os.system('mkdir tmp2 > /dev/null 2>&1')
 	if msg.text:
-		text = getPrefix(msg) + msg.text
+		text = getPrefix(msg) + decorate(msg.text)
 		itchat.send(text, chatroom_id)
 		msg.chat.send_message(text)
 	elif msg.photo:
