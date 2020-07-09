@@ -25,6 +25,12 @@ def sendMsg(name, text):
 	itchat.send(text, toUserName=users[0]['UserName'])
 	debug_group.send_message('success')
 
+def login():
+	global last_login_time
+	if time.time() - last_login_time > 60 * 60:
+		itchat.auto_login(enableCmdQR=2, hotReload=True)
+		last_login_time = time.time()
+
 def sendToFeminismPrivateGroup(msg):
 	if msg.from_user.first_name != 'Yunz':
 		prefix = 'From ' + msg.from_user.first_name + ': '
@@ -49,6 +55,7 @@ def replyGroup(update, context):
 	if not msg:
 		return
 	if msg.chat_id == feminism_private_group.id:
+		login()
 		sendToFeminismPrivateGroup(msg)
 
 @log_on_fail(debug_group)
@@ -65,10 +72,7 @@ def reply(update, context):
 	if not cap:
 		return
 	name = cap.split(':')[0].lstrip('from').lstrip('to').strip()
-	global last_login_time
-	if time.time() - last_login_time > 60 * 60:
-		itchat.auto_login(enableCmdQR=2, hotReload=True)
-		last_login_time = time.time()
+	login()
 	sendMsg(name, msg.text)
 
 tele.dispatcher.add_handler(MessageHandler(Filters.private, reply), group = 3)
