@@ -64,6 +64,12 @@ def forwardToDebugChannel(msg):
 	ATTACHMENT, VIDEO], isFriendChat=True)
 def friend(msg):
 	forwardToDebugChannel(msg)
+
+@log_on_fail(debug_group)
+@itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
+	ATTACHMENT, VIDEO], isGroupChat=True)
+def groupToTelegram(msg):
+	print('groupToTelegram', msg.User.NickName)
 	
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
