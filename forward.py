@@ -69,7 +69,10 @@ def friend(msg):
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isGroupChat=True)
 def groupToTelegram(msg):
-	print('groupToTelegram', msg.User.NickName)
+	try:
+		print('groupToTelegram', msg.User.NickName)
+	except:
+		print(msg.User)
 	
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
