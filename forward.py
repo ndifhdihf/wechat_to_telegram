@@ -21,8 +21,7 @@ feminism_private_group = bot.get_chat(-1001239224743)
 link_status = plain_db.load('existing')
 
 @log_on_fail(debug_group)
-@itchat.msg_register(SHARING, isGroupChat=True)
-def group(msg):
+def sendToWebRecord(msg):
 	print('msg.Url', msg.Url)
 	if not msg.Url or matchKey(msg.Url, BLACKLIST):
 		return
@@ -74,9 +73,10 @@ def friend(msg):
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isGroupChat=True)
 def groupToTelegram(msg):
-	if not matchKey(msg.User.get('NickName'), ['女性会客厅']):
-		return
-	forwardToChannel(msg, feminism_private_group)
+	if matchKey(msg.User.get('NickName'), ['女性会客厅']):
+		forwardToChannel(msg, feminism_private_group)
+	if msg.type == SHARING:
+		sendToWebRecord(msg)
 	
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
