@@ -31,14 +31,16 @@ def login():
 		itchat.auto_login(enableCmdQR=2, hotReload=True)
 		last_login_time = time.time()
 
+def getPrefix(telegram_msg):
+	if telegram_msg.from_user.first_name != 'Yunz':
+		return 'From ' + msg.from_user.first_name + ': '
+	return ''
+
 def sendToFeminismPrivateGroup(msg):
-	prefix = ''
-	if msg.from_user.first_name != 'Yunz':
-		prefix = 'From ' + msg.from_user.first_name + ': '
 	chatroom_id = itchat.search_chatrooms(
 		name = wechat_feminism_group_name)[0]['UserName']
 	if msg.text:
-		itchat.send(prefix + msg.text, chatroom_id)
+		itchat.send(getPrefix(msg) + msg.text, chatroom_id)
 		return
 	os.system('mkdir tmp2 > /dev/null 2>&1')
 	if msg.photo:
