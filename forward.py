@@ -48,14 +48,16 @@ def forwardToDebugChannel(msg):
 	if msg.type in [TEXT, SHARING]:
 		debug_group.send_message('%s: %s' % (cap, msg.Url or msg.text))
 	else:
-		msg.download(msg.fileName)
+		os.system('mkdir tmp > /dev/null 2>&1')
+		fn = 'tmp/' + msg.fileName
+		msg.download(fn)
 		if msg.type == PICTURE:
-			debug_group.send_photo(open(msg.fileName, 'rb'), 
+			debug_group.send_photo(open(fn, 'rb'), 
 				caption=cap, timeout = 20 * 60)
 		else:
-			debug_group.send_document(open(msg.fileName, 'rb'), 
+			debug_group.send_document(open(fn, 'rb'), 
 				caption=cap, timeout = 20 * 60)
-		os.system('rm ' + msg.fileName)
+		os.system('rm ' + fn)
 
 @log_on_fail(debug_group)
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
