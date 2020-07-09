@@ -64,12 +64,13 @@ def forwardToChannel(msg, channel = debug_group):
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isFriendChat=True)
 def friend(msg):
-	forwardToDebugChannel(msg)
+	forwardToChannel(msg)
 
 @log_on_fail(debug_group)
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isGroupChat=True)
 def groupToTelegram(msg):
+	print('groupToTelegram', msg.User.get('NickName'))
 	if not matchKey(msg.User.get('NickName'), ['随记']):
 		return
 	forwardToChannel(msg, feminism_private_group)
