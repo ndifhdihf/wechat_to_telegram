@@ -45,8 +45,11 @@ def decorate(text):
 	return text
 
 def sendToFeminismPrivateGroup(msg):
-	chatroom_id = itchat.search_chatrooms(
-		name = wechat_feminism_group_name)[0]['UserName']
+	search_result = itchat.search_chatrooms(
+		name = wechat_feminism_group_name)
+	if not search_result:
+		return
+	chatroom_id = search_result[0]['UserName']
 	os.system('mkdir tmp2 > /dev/null 2>&1')
 	if msg.text:
 		text = getPrefix(msg) + decorate(msg.text)

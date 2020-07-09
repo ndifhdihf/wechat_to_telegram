@@ -56,8 +56,12 @@ def forwardToChannel(msg, channel = debug_group):
 		fn = 'tmp1/' + msg.fileName
 		r = msg.download(fn)
 		if msg.type == PICTURE:
-			channel.send_photo(open(fn, 'rb'), 
-				caption=cap, timeout = 20 * 60)
+			try:
+				channel.send_photo(open(fn, 'rb'), 
+					caption=cap, timeout = 20 * 60)
+			except Exception as e:
+				if not matchKey(str(e), ['File must be non-empty']):
+					raise e
 		else:
 			channel.send_document(open(fn, 'rb'), 
 				caption=cap, timeout = 20 * 60)
