@@ -32,6 +32,7 @@ def login():
 		last_login_time = time.time()
 
 def sendToFeminismPrivateGroup(msg):
+	prefix = ''
 	if msg.from_user.first_name != 'Yunz':
 		prefix = 'From ' + msg.from_user.first_name + ': '
 	chatroom_id = itchat.search_chatrooms(
