@@ -4,6 +4,7 @@
 from telegram.ext import Updater, MessageHandler, Filters
 import itchat
 from telegram_util import log_on_fail
+import cached_url
 from common import getFile
 import time
 import os
@@ -47,12 +48,12 @@ def sendToFeminismPrivateGroup(msg):
 		msg.chat.send_message(text)
 	elif msg.photo:
 		file = msg.photo[0].get_file()
-		fn = file.download('tmp2/' + file.file_path)
+		fn = file.download(cached_url.getFilePath(file.file_path))
 		itchat.send_image(fn, toUserName=chatroom_id)
 		msg.forward(feminism_private_group.id)
 	elif msg.document:
 		file = msg.document.get_file()
-		fn = file.download('tmp2/' + file.file_path)
+		fn = file.download(cached_url.getFilePath(file.file_path))
 		print(fn)
 		itchat.send_file(fn, toUserName=chatroom_id) 
 		print(2)
