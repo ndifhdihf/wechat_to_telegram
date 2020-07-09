@@ -11,7 +11,7 @@ import os
 tele = Updater(getFile('credential')['bot_token'], use_context=True)
 bot = tele.bot
 debug_group = bot.get_chat(420074357)
-feminism_private_group = bot.get_chat(-428192067)
+feminism_private_group = bot.get_chat(-1001239224743)
 wechat_feminism_group_name = '女性会客厅'
 
 last_login_time = 0

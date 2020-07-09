@@ -17,7 +17,7 @@ import plain_db
 bot = Updater(getFile('credential')['bot_token'], use_context=True).bot # weixin_subscription_bot 
 debug_group = bot.get_chat(420074357)
 web_record = bot.get_chat('@web_record')
-feminism_private_group = bot.get_chat(-428192067)
+feminism_private_group = bot.get_chat(-1001239224743)
 link_status = plain_db.load('existing')
 
 @log_on_fail(debug_group)
