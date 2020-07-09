@@ -16,7 +16,7 @@ import plain_db
 
 bot = Updater(getFile('credential')['bot_token'], use_context=True).bot # weixin_subscription_bot 
 debug_group = bot.get_chat(420074357)
-channel = bot.get_chat('@web_record')
+web_record = bot.get_chat('@web_record')
 feminism_private_group = bot.get_chat(-428192067)
 link_status = plain_db.load('existing')
 
@@ -34,7 +34,7 @@ def group(msg):
 	else:
 		link_status.inc(title, 1)
 	if link_status.get(title) >= 2:
-		channel.send_message(msg.Url)
+		web_record.send_message(msg.Url)
 
 def forwardToChannel(msg, channel = debug_group):
 	name = msg.User.get('RemarkName') or msg.User.NickName
@@ -47,16 +47,17 @@ def forwardToChannel(msg, channel = debug_group):
 		recieve_type = 'from'
 	cap = '%s %s' % (recieve_type, name)
 	if msg.type in [TEXT, SHARING]:
-		debug_group.send_message('%s: %s' % (cap, msg.Url or msg.text))
+		channel.send_message('%s: %s' % (cap, msg.Url or msg.text))
 	else:
 		os.system('mkdir tmp > /dev/null 2>&1')
 		fn = 'tmp/' + msg.fileName
 		msg.download(fn)
+		print('testing 1', msg.type)
 		if msg.type == PICTURE:
-			debug_group.send_photo(open(fn, 'rb'), 
+			channel.send_photo(open(fn, 'rb'), 
 				caption=cap, timeout = 20 * 60)
 		else:
-			debug_group.send_document(open(fn, 'rb'), 
+			channel.send_document(open(fn, 'rb'), 
 				caption=cap, timeout = 20 * 60)
 		os.system('rm ' + fn)
 
@@ -70,7 +71,6 @@ def friend(msg):
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isGroupChat=True)
 def groupToTelegram(msg):
-	print('groupToTelegram', msg.User.get('NickName'))
 	if not matchKey(msg.User.get('NickName'), ['随记']):
 		return
 	forwardToChannel(msg, feminism_private_group)
