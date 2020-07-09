@@ -34,8 +34,8 @@ def login():
 def sendToFeminismPrivateGroup(msg):
 	if msg.from_user.first_name != 'Yunz':
 		prefix = 'From ' + msg.from_user.first_name + ': '
-	print(itchat.search_chatrooms(name = wechat_feminism_group_name))
-	chatroom_id = itchat.search_chatrooms(name = wechat_feminism_group_name)[0].id
+	chatroom_id = itchat.search_chatrooms(
+		name = wechat_feminism_group_name)[0]['UserName']
 	if msg.text:
 		itchat.send(prefix + msg.text, chatroom_id)
 		return
