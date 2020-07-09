@@ -40,18 +40,19 @@ def getPrefix(telegram_msg):
 def sendToFeminismPrivateGroup(msg):
 	chatroom_id = itchat.search_chatrooms(
 		name = wechat_feminism_group_name)[0]['UserName']
+	os.system('mkdir tmp2 > /dev/null 2>&1')
 	if msg.text:
 		itchat.send(getPrefix(msg) + msg.text, chatroom_id)
-		return
-	os.system('mkdir tmp2 > /dev/null 2>&1')
-	if msg.photo:
+	elif msg.photo:
 		fn = msg.photo[0].get_file().download('tmp2/')
-		itchat.send_image(fn, toUserName=chatroom_id) 
-		return
-	if msg.document:
-		fn = document.get_file().download('tmp2/')
+		itchat.send_image(fn, toUserName=chatroom_id)
+	elif msg.document:
+		fn = msg.document.get_file().download('tmp2/')
 		itchat.send_file(fn, toUserName=chatroom_id) 
+	else:
 		return
+	msg.forward(feminism_private_group.id)
+	msg.delete()
 
 @log_on_fail(debug_group)
 def replyGroup(update, context):
