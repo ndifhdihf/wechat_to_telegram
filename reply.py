@@ -46,11 +46,13 @@ def sendToFeminismPrivateGroup(msg):
 		itchat.send(text, chatroom_id)
 		msg.chat.send_message(text)
 	elif msg.photo:
-		fn = msg.photo[0].get_file().download('tmp2/')
+		file = msg.photo[0].get_file()
+		fn = file.download('tmp2/' + file.file_path)
 		itchat.send_image(fn, toUserName=chatroom_id)
 		msg.forward(feminism_private_group.id)
 	elif msg.document:
-		fn = msg.document.get_file().download('tmp2/')
+		file = msg.document.get_file()
+		fn = file.download('tmp2/' + file.file_path)
 		print(fn)
 		itchat.send_file(fn, toUserName=chatroom_id) 
 		print(2)
