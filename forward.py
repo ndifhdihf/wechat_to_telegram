@@ -36,6 +36,7 @@ def group(msg):
 	if link_status.get(title) >= 2:
 		web_record.send_message(msg.Url)
 
+@log_on_fail(debug_group)
 def forwardToChannel(msg, channel = debug_group):
 	name = (msg.get('ActualNickName') or 
 		msg.User.get('RemarkName') or msg.User.NickName)
@@ -55,8 +56,6 @@ def forwardToChannel(msg, channel = debug_group):
 		os.system('mkdir tmp1 > /dev/null 2>&1')
 		fn = 'tmp1/' + msg.fileName
 		r = msg.download(fn)
-		print(r, fn)
-		print('testing 1', msg.type)
 		if msg.type == PICTURE:
 			channel.send_photo(open(fn, 'rb'), 
 				caption=cap, timeout = 20 * 60)

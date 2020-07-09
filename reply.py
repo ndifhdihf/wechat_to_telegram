@@ -44,12 +44,18 @@ def sendToFeminismPrivateGroup(msg):
 		return
 
 @log_on_fail(debug_group)
-def reply(update, context):
+def replyGroup(update, context):
 	msg = update.message
 	if not msg:
 		return
 	if msg.chat_id == feminism_private_group.id:
 		sendToFeminismPrivateGroup(msg)
+
+@log_on_fail(debug_group)
+def reply(update, context):
+	msg = update.message
+	if not msg:
+		return
 	if msg.chat_id != debug_group.id or not msg.text:
 		return
 	r_msg = msg.reply_to_message
@@ -66,5 +72,6 @@ def reply(update, context):
 	sendMsg(name, msg.text)
 
 tele.dispatcher.add_handler(MessageHandler(Filters.private, reply), group = 3)
+tele.dispatcher.add_handler(MessageHandler(Filters.group, replyGroup), group = 4)
 tele.start_polling()
 tele.idle()
