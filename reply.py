@@ -6,6 +6,7 @@ import itchat
 from telegram_util import log_on_fail
 from common import getFile
 import time
+import os
 
 tele = Updater(getFile('credential')['bot_token'], use_context=True)
 bot = tele.bot
