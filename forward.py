@@ -49,9 +49,10 @@ def forwardToChannel(msg, channel = debug_group):
 	if msg.type in [TEXT, SHARING]:
 		channel.send_message('%s: %s' % (cap, msg.Url or msg.text))
 	else:
-		os.system('mkdir tmp > /dev/null 2>&1')
-		fn = 'tmp/' + msg.fileName
-		msg.download(fn)
+		os.system('mkdir tmp1 > /dev/null 2>&1')
+		fn = 'tmp1/' + msg.fileName
+		r = msg.download(fn)
+		print(r, fn)
 		print('testing 1', msg.type)
 		if msg.type == PICTURE:
 			channel.send_photo(open(fn, 'rb'), 
