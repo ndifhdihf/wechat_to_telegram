@@ -17,6 +17,7 @@ import plain_db
 bot = Updater(getFile('credential')['bot_token'], use_context=True).bot # weixin_subscription_bot 
 debug_group = bot.get_chat(420074357)
 channel = bot.get_chat('@web_record')
+feminism_private_group = bot.get_chat(-428192067)
 link_status = plain_db.load('existing')
 
 @log_on_fail(debug_group)
@@ -35,7 +36,7 @@ def group(msg):
 	if link_status.get(title) >= 2:
 		channel.send_message(msg.Url)
 
-def forwardToDebugChannel(msg):
+def forwardToChannel(msg, channel = debug_group):
 	name = msg.User.get('RemarkName') or msg.User.NickName
 	if 'mute' in name:
 		return
@@ -69,10 +70,9 @@ def friend(msg):
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isGroupChat=True)
 def groupToTelegram(msg):
-	try:
-		print('groupToTelegram', msg.User.NickName)
-	except:
-		print(msg.User)
+	if not matchKey(msg.User.get('NickName'), ['随记']):
+		return
+	forwardToChannel(msg, feminism_private_group)
 	
 itchat.auto_login(enableCmdQR=2, hotReload=True)
 itchat.run(True)
