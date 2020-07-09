@@ -11,6 +11,7 @@ tele = Updater(getFile('credential')['bot_token'], use_context=True)
 bot = tele.bot
 debug_group = bot.get_chat(420074357)
 feminism_private_group = bot.get_chat(-428192067)
+wechat_feminism_group_name = '女性会客厅'
 
 last_login_time = 0
 
@@ -25,17 +26,31 @@ def sendMsg(name, text):
 	debug_group.send_message('success')
 
 def sendToFeminismPrivateGroup(msg):
-	# msg.
-	...
+	print(msg.from_user.firstname)
+	if msg.from_user.firstname != 'yunz':
+		prefix = 'From ' + msg.from_user.firstname + ': '
+	chatroom_id = itchat.search_chatrooms(wechat_feminism_group_name)[0].id
+	if msg.text:
+		itchat.send(prefix + msg.text, chatroom_id)
+		return
+	os.system('mkdir tmp2 > /dev/null 2>&1')
+	if msg.photo:
+		fn = msg.photo[0].get_file().download('tmp2/')
+		itchat.send_image(fn, toUserName=chatroom_id) 
+		return
+	if msg.document:
+		fn = document.get_file().download('tmp2/')
+		itchat.send_file(fn, toUserName=chatroom_id) 
+		return
 
 @log_on_fail(debug_group)
 def reply(update, context):
 	msg = update.message
-	if not msg or not msg.text:
+	if not msg:
 		return
 	if msg.chat_id == feminism_private_group.id:
 		sendToFeminismPrivateGroup(msg)
-	if msg.chat_id != debug_group.id:
+	if msg.chat_id != debug_group.id or not msg.text:
 		return
 	r_msg = msg.reply_to_message
 	if not r_msg:
