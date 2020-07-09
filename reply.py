@@ -53,7 +53,7 @@ def sendToFeminismPrivateGroup(msg):
 		msg.forward(feminism_private_group.id)
 	elif msg.document:
 		file = msg.document.get_file()
-		fn = file.download(cached_url.getFilePath(file.file_path))
+		fn = file.download('tmp2/' + msg.document.file_name)
 		print(fn)
 		itchat.send_file(fn, toUserName=chatroom_id) 
 		print(2)
