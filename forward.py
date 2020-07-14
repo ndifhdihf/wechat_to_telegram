@@ -28,7 +28,7 @@ def sendToWebRecord(msg):
 	title = getTitle(msg.Url)
 	if link_status.get(title, 0) >= 2:
 		return # sent before
-	if matchKey(msg.User.NickName, ['女权', '平权', 'hardcore', 'dykes']):
+	if matchKey(msg.User.get(NickName), ['女权', '平权', 'hardcore', 'dykes']):
 		link_status.inc(title, 2)
 	else:
 		link_status.inc(title, 1)
