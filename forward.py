@@ -77,7 +77,7 @@ def friend(msg):
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isGroupChat=True)
 def groupToTelegram(msg):
-	if matchKey(msg.User.get('NickName'), ['女性会客厅']):
+	if matchKey(msg.User.get('NickName'), ['一期一会']):
 		forwardToChannel(msg, feminism_private_group)
 	if msg.type == SHARING:
 		sendToWebRecord(msg)
