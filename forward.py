@@ -6,6 +6,7 @@ BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ', 'Panziye4869', 'Artemis',
 	'MzI0ODg4NDM5Mw', 'MzAwNjgzMTQ5NQ', 'MzIyOTQyNDY2OQ', 'MzU2ODAyMTc3MQ',
 	'MzU4NTc3NzA4Mg', 'MzU1MzgyMzg4Mg', 
 	'MzU0NTI2OTk5MA', 'MzI5OTIzNjE3OA', # 讲座信息
+	'MzIxNzA3NDQ5NQ',
 ]
 
 from telegram.ext import Updater
