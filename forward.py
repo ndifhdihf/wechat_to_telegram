@@ -5,9 +5,10 @@ BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ', 'Panziye4869', 'Artemis',
 	'support.weixin.qq.com', 'volition', 'MzI5NzUxMDU4OQ', '/promo/', 
 	'MzI0ODg4NDM5Mw', 'MzAwNjgzMTQ5NQ', 'MzIyOTQyNDY2OQ', 'MzU2ODAyMTc3MQ',
 	'MzU4NTc3NzA4Mg', 'MzU1MzgyMzg4Mg', 
-	# 'MzU0NTI2OTk5MA', 'MzI5OTIzNjE3OA', # 讲座信息
 	'MzIxNzA3NDQ5NQ',
 ]
+
+LECTURE_KEYS = ['MzU0NTI2OTk5MA', 'MzI5OTIzNjE3OA', '讲座']
 
 from telegram.ext import Updater
 import itchat
@@ -21,6 +22,7 @@ import plain_db
 bot = Updater(getFile('credential')['bot_token'], use_context=True).bot # weixin_subscription_bot 
 debug_group = bot.get_chat(420074357)
 web_record = bot.get_chat('@web_record')
+lecture_info = bot.get_chat('@lecture_info')
 feminism_private_group = bot.get_chat(-1001239224743)
 link_status = plain_db.load('existing')
 
@@ -32,11 +34,16 @@ def sendToWebRecord(msg):
 	title = getTitle(msg.Url)
 	if link_status.get(title, 0) >= 2:
 		return # sent before
+	if (link_status.get(title, 0) == 0 and 
+			matchKey(title + msg.Url, LECTURE_KEYS)):
+		lecture_info.send_message(export_to_telegraph.export(
+			msg.Url) or msg.Url)
 	if matchKey(msg.User.get('NickName'), ['女权', '平权', 'hardcore', 'dykes']):
 		link_status.inc(title, 2)
 	else:
 		link_status.inc(title, 1)
-	if link_status.get(title) >= 2:
+	if (link_status.get(title) >= 2 and 
+			not matchKey(title + msg.Url, LECTURE_KEYS)):
 		web_record.send_message(msg.Url)
 
 @log_on_fail(debug_group)
