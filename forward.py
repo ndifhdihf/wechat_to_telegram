@@ -13,7 +13,7 @@ LECTURE_KEYS = ['MzU0NTI2OTk5MA', 'MzI5OTIzNjE3OA', '讲座']
 from telegram.ext import Updater
 import itchat
 from itchat.content import *
-from telegram_util import matchKey, log_on_fail
+from telegram_util import matchKey, log_on_fail, clearUrl
 from common import getFile
 from export_to_telegraph import getTitle
 import export_to_telegraph
@@ -29,23 +29,23 @@ link_status = plain_db.load('existing')
 
 @log_on_fail(debug_group)
 def sendToWebRecord(msg):
-	print('msg.Url', msg.Url)
-	if not msg.Url or matchKey(msg.Url, BLACKLIST):
+	url = clearUrl(msg.Url)
+	if not url or matchKey(url, BLACKLIST):
 		return
-	title = getTitle(msg.Url)
+	title = getTitle(url)
 	if link_status.get(title, 0) >= 2:
 		return # sent before
 	if (link_status.get(title, 0) == 0 and 
-			matchKey(title + msg.Url, LECTURE_KEYS)):
+			matchKey(title + url, LECTURE_KEYS)):
 		lecture_info.send_message(export_to_telegraph.export(
-			msg.Url) or msg.Url)
+			url) or url)
 	if matchKey(msg.User.get('NickName'), ['女权', '平权', 'hardcore', 'dykes']):
 		link_status.inc(title, 2)
 	else:
 		link_status.inc(title, 1)
 	if (link_status.get(title) >= 2 and 
-			not matchKey(title + msg.Url, LECTURE_KEYS)):
-		web_record.send_message(msg.Url)
+			not matchKey(title + url, LECTURE_KEYS)):
+		web_record.send_message(url)
 
 @log_on_fail(debug_group)
 def forwardToChannel(msg, channel = debug_group):
@@ -62,7 +62,8 @@ def forwardToChannel(msg, channel = debug_group):
 	if channel.id != debug_group.id:
 		cap = name
 	if msg.type in [TEXT, SHARING]:
-		channel.send_message('%s: %s' % (cap, msg.Url or msg.text))
+		channel.send_message('%s: %s' % (cap, 
+			clearUrl(msg.Url) or msg.text))
 	else:
 		os.system('mkdir tmp1 > /dev/null 2>&1')
 		fn = 'tmp1/' + msg.fileName
