@@ -16,6 +16,7 @@ from itchat.content import *
 from telegram_util import matchKey, log_on_fail
 from common import getFile
 from export_to_telegraph import getTitle
+import export_to_telegraph
 import os
 import plain_db
 
