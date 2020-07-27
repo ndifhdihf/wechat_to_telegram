@@ -51,7 +51,7 @@ def sendToWebRecord(msg):
 @log_on_fail(debug_group)
 def forwardToChannel(msg, channel = debug_group):
 	name = (msg.get('ActualNickName') or 
-		msg.User.get('RemarkName') or msg.User.get('NickName')) or ''
+		msg.User.get('RemarkName') or msg.User.get('NickName') or '')
 	if 'mute' in name:
 		return
 	result = itchat.search_friends(userName=msg.FromUserName)
