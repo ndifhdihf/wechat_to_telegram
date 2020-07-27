@@ -39,7 +39,8 @@ def sendToWebRecord(msg):
 			matchKey(title + url, LECTURE_KEYS)):
 		lecture_info.send_message(export_to_telegraph.export(
 			url) or url)
-	if matchKey(msg.User.get('NickName'), ['女权', '平权', 'hardcore', 'dykes']):
+	if matchKey(msg.User.get('NickName'), ['女权', '平权', 
+		'hardcore', 'dykes', '随记']):
 		link_status.inc(title, 2)
 	else:
 		link_status.inc(title, 1)
