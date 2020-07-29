@@ -6,6 +6,7 @@ BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ', 'Panziye4869', 'Artemis',
 	'MzI0ODg4NDM5Mw', 'MzAwNjgzMTQ5NQ', 'MzIyOTQyNDY2OQ', 'MzU2ODAyMTc3MQ',
 	'MzU4NTc3NzA4Mg', 'MzU1MzgyMzg4Mg', 
 	'MzIxNzA3NDQ5NQ', 'MzIzMDY2OTE2Nw', 'MzIwMzAwMzQxNw', 'MzU4NDU2MTA3MQ',
+	'MzI3MDYxMjI0OQ',
 ]
 
 LECTURE_KEYS = ['MzU0NTI2OTk5MA', 'MzI5OTIzNjE3OA', '讲座']
