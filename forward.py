@@ -33,7 +33,7 @@ def sendToWebRecord(msg):
 	url = clearUrl(msg.Url)
 	if not url or matchKey(url, BLACKLIST):
 		return
-	title = getTitle(url)
+	title = ''.join(getTitle(url).split())
 	if link_status.get(title, 0) >= 2:
 		return # sent before
 	if (link_status.get(title, 0) == 0 and 
