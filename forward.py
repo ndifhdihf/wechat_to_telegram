@@ -11,6 +11,7 @@ BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ', 'Panziye4869', 'Artemis',
 	'MzUyMTMzODAzMQ', 'MzI3ODE0Nzk4Mw'
 ]
 
+
 LECTURE_KEYS = ['MzU0NTI2OTk5MA', 'MzI5OTIzNjE3OA', '讲座']
 
 from telegram.ext import Updater
