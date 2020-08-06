@@ -40,7 +40,6 @@ def sendUrl(url, title, msg):
 		return True
 
 	sender = msg.get('ActualNickName') or '1'
-	print('sender', sender) # testing
 	if sender in BLACKLIST:
 		return False
 	
