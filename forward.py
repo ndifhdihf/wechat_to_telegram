@@ -8,7 +8,7 @@ BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ', 'Panziye4869', 'Artemis',
 	'MzIxNzA3NDQ5NQ', 'MzIzMDY2OTE2Nw', 'MzIwMzAwMzQxNw', 'MzU4NDU2MTA3MQ',
 	'MzI3MDYxMjI0OQ', 'MzI5NjE5ODA1MA', 'MzI5MTQ0MDkzMw', 'MzAwMjY1ODE4OQ',
 	'MzIwNzIzOTIzNQ', 'MzUzNDA0MjI5OA', 'MzI1MDUwMzcxNw', 'MzI5ODMzMDU3OA',
-	'MzUyMTMzODAzMQ', 'MzI3ODE0Nzk4Mw', 'MzU3MDcwNDU0Nw',
+	'MzUyMTMzODAzMQ', 'MzI3ODE0Nzk4Mw', 'MzU3MDcwNDU0Nw', 'kg.qq.com',
 ]
 
 LECTURE_KEYS = ['MzU0NTI2OTk5MA', 'MzI5OTIzNjE3OA', '讲座']
