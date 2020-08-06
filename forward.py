@@ -29,7 +29,25 @@ debug_group = bot.get_chat(420074357)
 web_record = bot.get_chat('@web_record')
 lecture_info = bot.get_chat('@lecture_info')
 feminism_private_group = bot.get_chat(-1001239224743)
-link_status = plain_db.load('existing')
+link_status = plain_db.load('existing', isIntValue=False)
+
+def sendUrl(title, url, msg):
+	if (not link_status.get(title) and 
+			matchKey(title + url, LECTURE_KEYS)):
+		lecture_info.send_message(export_to_telegraph.export(
+			url) or url)
+		return True
+	if matchKey(msg.User.get('NickName'), ['女权讨论', '平权讨论', 
+		'hardcore', 'dykes', '随记']):
+		web_record.send_message(url)
+		return True
+	sender = msg.get('ActualNickName') or '1'
+	print('sender', sender)
+	if link_status.get(title) and link_status.get(title) != sender:
+		web_record.send_message(url)
+		return True
+	link_status.update(title, sender)
+	return False
 
 @log_on_fail(debug_group)
 def sendToWebRecord(msg):
@@ -37,20 +55,11 @@ def sendToWebRecord(msg):
 	if not url or matchKey(url, BLACKLIST):
 		return
 	title = ''.join(getTitle(url).split())
-	if link_status.get(title, 0) >= 2:
-		return # sent before
-	if (link_status.get(title, 0) == 0 and 
-			matchKey(title + url, LECTURE_KEYS)):
-		lecture_info.send_message(export_to_telegraph.export(
-			url) or url)
-	if matchKey(msg.User.get('NickName'), ['女权', '平权', 
-		'hardcore', 'dykes', '随记']):
-		link_status.inc(title, 2)
-	else:
-		link_status.inc(title, 1)
-	if (link_status.get(title) >= 2 and 
-			not matchKey(title + url, LECTURE_KEYS)):
-		web_record.send_message(url)
+	# 2,3 is legacy value
+	if link_status.get(title) in ['2', '3', 'sent']: 
+		return
+	if sendUrl(title, url, msg):
+		link_status.update(title, 'sent')
 
 @log_on_fail(debug_group)
 def forwardToChannel(msg, channel = debug_group):
