@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+WC_GROUP_WHITELIST = ['女权讨论', '平权讨论', 'hardcore', 'dykes', '随记']
+
 BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ', 'Panziye4869', 'Artemis', 
 	'support.weixin.qq.com', 'volition', 'MzI5NzUxMDU4OQ', '/promo/', 
 	'MzI0ODg4NDM5Mw', 'MzAwNjgzMTQ5NQ', 'MzIyOTQyNDY2OQ', 'MzU2ODAyMTc3MQ',
@@ -9,7 +11,7 @@ BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ', 'Panziye4869', 'Artemis',
 	'MzI3MDYxMjI0OQ', 'MzI5NjE5ODA1MA', 'MzI5MTQ0MDkzMw', 'MzAwMjY1ODE4OQ',
 	'MzIwNzIzOTIzNQ', 'MzUzNDA0MjI5OA', 'MzI1MDUwMzcxNw', 'MzI5ODMzMDU3OA',
 	'MzUyMTMzODAzMQ', 'MzI3ODE0Nzk4Mw', 'MzU3MDcwNDU0Nw', 'kg.qq.com',
-	'MzAxMTg5Nzg4NQ',
+	'MzAxMTg5Nzg4NQ', '小菜'
 ]
 
 LECTURE_KEYS = ['MzU0NTI2OTk5MA', 'MzI5OTIzNjE3OA', '讲座']
@@ -31,23 +33,27 @@ lecture_info = bot.get_chat('@lecture_info')
 feminism_private_group = bot.get_chat(-1001239224743)
 link_status = plain_db.load('existing', isIntValue=False)
 
-def sendUrl(title, url, msg):
-	if (not link_status.get(title) and 
-			matchKey(title + url, LECTURE_KEYS)):
+def sendUrl(url, title, msg):
+	if matchKey(title + url, LECTURE_KEYS):
 		lecture_info.send_message(export_to_telegraph.export(
 			url) or url)
 		return True
-	if matchKey(msg.User.get('NickName'), ['女权讨论', '平权讨论', 
-		'hardcore', 'dykes', '随记']):
+
+	sender = msg.get('ActualNickName') or '1'
+	print('sender', sender) # testing
+	if sender in BLACKLIST:
+		return False
+	
+	wc_group = msg.User.get('NickName')
+	if matchKey(wc_group, WC_GROUP_WHITELIST):
 		web_record.send_message(url)
 		return True
-	sender = msg.get('ActualNickName') or '1'
-	print('sender', sender)
-	if sender in ['小菜']:
-		return False
+
+	# an article is shared by two different users
 	if link_status.get(title) and link_status.get(title) != sender:
 		web_record.send_message(url)
 		return True
+		
 	link_status.update(title, sender)
 	return False
 
@@ -60,7 +66,7 @@ def sendToWebRecord(msg):
 	# 2,3 is legacy value
 	if link_status.get(title) in ['2', '3', 'sent']: 
 		return
-	if sendUrl(title, url, msg):
+	if sendUrl(url, title, msg):
 		link_status.update(title, 'sent')
 
 @log_on_fail(debug_group)
