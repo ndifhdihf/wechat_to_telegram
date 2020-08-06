@@ -42,6 +42,8 @@ def sendUrl(title, url, msg):
 		web_record.send_message(url)
 		return True
 	sender = msg.get('ActualNickName') or '1'
+	if sender in ['小菜']:
+		return False
 	print('sender', sender)
 	if link_status.get(title) and link_status.get(title) != sender:
 		web_record.send_message(url)
