@@ -12,7 +12,7 @@ BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ', 'Panziye4869', 'Artemis',
 	'MzIwNzIzOTIzNQ', 'MzUzNDA0MjI5OA', 'MzI1MDUwMzcxNw', 'MzI5ODMzMDU3OA',
 	'MzUyMTMzODAzMQ', 'MzI3ODE0Nzk4Mw', 'MzU3MDcwNDU0Nw', 'kg.qq.com',
 	'MzAxMTg5Nzg4NQ', '小菜', 'cpu.baidu', 'MzUxOTEwMzc3Ng', '林米路', '学习强国',
-	'MzAxNjI2MzM1MQ', '中国人',
+	'MzAxNjI2MzM1MQ', '中国人', 'gongyi.qq',
 ]
 
 LECTURE_KEYS = ['MzU0NTI2OTk5MA', 'MzI5OTIzNjE3OA', '讲座']
