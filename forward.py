@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-WC_GROUP_WHITELIST = ['女权讨论', '平权讨论', 'hardcore', 'dykes', '随记']
+WC_GROUP_WHITELIST = ['女权讨论', '平权讨论', 'hardcore', 'dykes', '随记', '女性主义']
 
 BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ', 'Panziye4869', 'Artemis', 
 	'support.weixin.qq.com', 'volition', 'MzI5NzUxMDU4OQ', '/promo/', 
