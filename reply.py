@@ -89,7 +89,7 @@ def reply(update, context):
 	if msg.chat_id != debug_group.id or not msg.text:
 		return
 	command, text = splitCommand(msg.text)
-	if command == 'abl':
+	if command == '/abl':
 		blocklist.add(text)
 		msg.reply_text('success')
 		commitRepo(delay_minute=0)
