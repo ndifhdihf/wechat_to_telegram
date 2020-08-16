@@ -3,12 +3,13 @@
 
 from telegram.ext import Updater, MessageHandler, Filters
 import itchat
-from telegram_util import log_on_fail, isUrl
+from telegram_util import log_on_fail, isUrl, splitCommand, commitRepo
 import cached_url
 from common import getFile
 import time
 import os
 from export_to_telegraph import getTitle
+from .forward import blocklist
 
 tele = Updater(getFile('credential')['bot_token'], use_context=True)
 bot = tele.bot
@@ -85,6 +86,12 @@ def reply(update, context):
 		return
 	if msg.chat_id != debug_group.id or not msg.text:
 		return
+	command, text = splitCommand(msg.text)
+	if command == 'abl':
+		blocklist.add(text)
+		msg.reply_text('success')
+		commitRepo(delay_minute=0)
+		return
 	r_msg = msg.reply_to_message
 	if not r_msg:
 		return
@@ -95,7 +102,8 @@ def reply(update, context):
 	login()
 	sendMsg(name, msg.text)
 
-tele.dispatcher.add_handler(MessageHandler(Filters.private, reply), group = 3)
-tele.dispatcher.add_handler(MessageHandler(Filters.group, replyGroup), group = 4)
-tele.start_polling()
-tele.idle()
+if __name__ == '__main__':
+	tele.dispatcher.add_handler(MessageHandler(Filters.private, reply), group = 3)
+	tele.dispatcher.add_handler(MessageHandler(Filters.group, replyGroup), group = 4)
+	tele.start_polling()
+	tele.idle()

@@ -3,18 +3,6 @@
 
 WC_GROUP_WHITELIST = ['女权讨论', '平权讨论', 'hardcore', 'dykes', '随记', '女性主义']
 
-BLACKLIST = ['waerrpage', 'MzIwOTkzNzQ0MQ', 'Panziye4869', 'Artemis', 
-	'support.weixin.qq.com', 'volition', 'MzI5NzUxMDU4OQ', '/promo/', 
-	'MzI0ODg4NDM5Mw', 'MzAwNjgzMTQ5NQ', 'MzIyOTQyNDY2OQ', 'MzU2ODAyMTc3MQ',
-	'MzU4NTc3NzA4Mg', 'MzU1MzgyMzg4Mg', 
-	'MzIxNzA3NDQ5NQ', 'MzIzMDY2OTE2Nw', 'MzIwMzAwMzQxNw', 'MzU4NDU2MTA3MQ',
-	'MzI3MDYxMjI0OQ', 'MzI5NjE5ODA1MA', 'MzI5MTQ0MDkzMw', 'MzAwMjY1ODE4OQ',
-	'MzIwNzIzOTIzNQ', 'MzUzNDA0MjI5OA', 'MzI1MDUwMzcxNw', 'MzI5ODMzMDU3OA',
-	'MzUyMTMzODAzMQ', 'MzI3ODE0Nzk4Mw', 'MzU3MDcwNDU0Nw', 'kg.qq.com',
-	'MzAxMTg5Nzg4NQ', '小菜', 'cpu.baidu', 'MzUxOTEwMzc3Ng', '林米路', '学习强国',
-	'MzAxNjI2MzM1MQ', '中国人', 'gongyi.qq', 'playsong.html', 'xiaoeknow',
-]
-
 LECTURE_KEYS = ['MzU0NTI2OTk5MA', 'MzI5OTIzNjE3OA', '讲座']
 
 from telegram.ext import Updater
@@ -33,6 +21,7 @@ web_record = bot.get_chat('@web_record')
 lecture_info = bot.get_chat('@lecture_info')
 feminism_private_group = bot.get_chat(-1001239224743)
 link_status = plain_db.load('existing', isIntValue=False)
+blocklist = plain_db.loadKeyOnlyDB('blocklist')
 
 def sendUrl(url, title, msg):
 	if matchKey(title + url, LECTURE_KEYS):
@@ -41,7 +30,7 @@ def sendUrl(url, title, msg):
 		return True
 
 	sender = msg.get('ActualNickName') or '1'
-	if sender in BLACKLIST:
+	if sender in blocklist.items():
 		return False
 	
 	wc_group = msg.User.get('NickName')
@@ -60,7 +49,7 @@ def sendUrl(url, title, msg):
 @log_on_fail(debug_group)
 def sendToWebRecord(msg):
 	url = clearUrl(msg.Url)
-	if not url or matchKey(url, BLACKLIST):
+	if not url or matchKey(url, blocklist.items()):
 		return
 	title = ''.join(getTitle(url).split())
 	# 2,3 is legacy value
@@ -117,5 +106,6 @@ def groupToTelegram(msg):
 	if msg.type == SHARING:
 		sendToWebRecord(msg)
 	
-itchat.auto_login(enableCmdQR=2, hotReload=True)
-itchat.run(True)
+if __name__ == '__main__':
+	itchat.auto_login(enableCmdQR=2, hotReload=True)
+	itchat.run(True)
