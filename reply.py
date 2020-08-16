@@ -9,7 +9,9 @@ from common import getFile
 import time
 import os
 from export_to_telegraph import getTitle
-from .forward import blocklist
+import plain_db
+
+blocklist = plain_db.loadKeyOnlyDB('blocklist')
 
 tele = Updater(getFile('credential')['bot_token'], use_context=True)
 bot = tele.bot
