@@ -84,15 +84,18 @@ def replyGroup(update, context):
 @log_on_fail(debug_group)
 def reply(update, context):
 	msg = update.message
-	if not msg:
+	if not msg or not msg.text:
 		return
-	if msg.chat_id != debug_group.id or not msg.text:
+	if msg.chat.username not in [debug_group.username, 'web_record']:
 		return
 	command, text = splitCommand(msg.text)
 	if command == '/abl':
 		blocklist.add(text)
 		msg.reply_text('success')
 		commitRepo(delay_minute=0)
+		return
+
+	if msg.chat_id != debug_group.id:
 		return
 	r_msg = msg.reply_to_message
 	if not r_msg:
