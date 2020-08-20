@@ -83,7 +83,7 @@ def replyGroup(update, context):
 
 @log_on_fail(debug_group)
 def reply(update, context):
-	msg = update.message
+	msg = update.effective_message
 	if not msg or not msg.text:
 		return
 	if msg.chat.username not in [debug_group.username, 'web_record']:
