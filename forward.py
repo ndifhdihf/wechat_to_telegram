@@ -82,19 +82,16 @@ def forward(msg):
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isFriendChat=True)
 def friend(msg):
+	print('friend', msg)
 	forward(msg)
 
 def getRawContent(msg):
 	content = [getPrefix(msg), msg.url, getRawHash(msg)]
 	return '\n'.join([str(item) for item in content])
 
-# TODO: change back to text and sharing only
 @log_on_fail(debug_group)
-@itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
-	ATTACHMENT, VIDEO], isGroupChat=True)
+@itchat.msg_register([TEXT, SHARING], isGroupChat=True)
 def group(msg):
-	print('group')
-	print(msg)
 	if matchKey(getRawContent(msg), blocklist.items()):
 		return
 	if matchKey(getRawHash(msg), subscription.items()):
