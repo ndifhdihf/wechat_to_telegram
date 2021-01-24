@@ -102,8 +102,8 @@ def loopImp():
 	search_result = itchat.search_chatrooms('【心理互助】你说我听')
 	chat = search_result[0]
 	for user in search_result[0].MemberList:
-		if matchKey(user.get('NickName'), ['段誉', '风雨']):
-			debug_group.send_message('【注意】【立踢】那个会骂人的又来加群了')
+		if matchKey(user.get('NickName'), ['段誉']):
+			debug_group.send_message('【注意】【立踢】那个会骂人的又来加群了', user.get('NickName'))
 
 def loop():
 	loopImp()
