@@ -5,7 +5,7 @@ from telegram.ext import Updater, MessageHandler, Filters
 import itchat
 from telegram_util import log_on_fail, isUrl, splitCommand, commitRepo
 import cached_url
-from common import getFile
+from common import token
 import time
 import os
 from export_to_telegraph import getTitle
@@ -13,7 +13,7 @@ import plain_db
 
 blocklist = plain_db.loadKeyOnlyDB('blocklist')
 
-tele = Updater(getFile('credential')['bot_token'], use_context=True)
+tele = Updater(token, use_context=True)
 bot = tele.bot
 debug_group = bot.get_chat(420074357)
 feminism_private_group = bot.get_chat(-1001239224743)
