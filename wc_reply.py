@@ -30,15 +30,15 @@ def sendMsg(name, msg):
 		return
 	os.system('mkdir tmp > /dev/null 2>&1')
 	if msg.text:
-		itchat.send(decorate(text), toUserName=users[0]['UserName'])
+		itchat.send(decorate(msg.text), toUserName=users[0]['UserName'])
 	elif msg.photo:
 		file = msg.photo[0].get_file()
 		fn = file.download(cached_url.getFilePath(file.file_path))
-		itchat.send_image(fn, toUserName=chatroom_id)
+		itchat.send_image(fn, toUserName=users[0]['UserName'])
 	elif msg.document:
 		file = msg.document.get_file()
 		fn = file.download('tmp/' + msg.document.file_name)
-		itchat.send_file(fn, toUserName=chatroom_id) 
+		itchat.send_file(fn, toUserName=users[0]['UserName']) 
 	else:
 		msg.reply_text('fail to send')
 		return
