@@ -19,16 +19,23 @@ subscription = plain_db.loadKeyOnlyDB('subscription')
 def getPrefix(msg):
 	name = (msg.get('ActualNickName') or 
 		msg.User.get('RemarkName') or msg.User.get('NickName') or '')
-	result = itchat.search_friends(userName=msg.FromUserName)
-	if result and 'unzhi' in result.get('NickName'):
+	
+	search_result = itchat.search_friends(userName=msg.FromUserName)
+	if search_result and 'unzhi' in search_result.get('NickName'):
 		recieve_type = 'to'
+		chat_name = msg.ToUserName
 	else:
 		recieve_type = 'from'
-	# TODO: get group name
-	print('\n')
-	print('find group name', msg)
-	print('chatroom', msg.get('Chatroom'))
-	return '%s %s' % (recieve_type, name)
+		chat_name = msg.FromUserName
+
+	search_result = itchat.search_chatrooms(userName=chat_name)
+	if not search_result: # private chat
+		return '%s %s' % (recieve_type, name)	
+
+	chat = search_result.get('RemarkName') or search_result.get('NickName')
+	if recieve_type == 'to':
+		return 'to ' + chat
+	return 'from %s in %s' % (name, chat)
 
 def getRawHash(msg):
 	if msg.type == TEXT:
@@ -60,7 +67,7 @@ def forward(msg):
 	if 'mute' in prefix:
 		return
 	msg_hash = getHash(msg)
-	if existing.get(msg_hash):
+	if existing.contain(msg_hash):
 		return
 
 	if msg.type in [TEXT, SHARING]:
@@ -81,16 +88,20 @@ def getRawContent(msg):
 	content = [getPrefix(msg), msg.url, getRawHash(msg)]
 	return '\n'.join([str(item) for item in content])
 
+# TODO: change back to text and sharing only
 @log_on_fail(debug_group)
-@itchat.msg_register([TEXT, SHARING], isGroupChat=True)
-def groupToTelegram(msg):
+@itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
+	ATTACHMENT, VIDEO], isGroupChat=True)
+def group(msg):
+	print('group')
+	print(msg)
 	if matchKey(getRawContent(msg), blocklist.items()):
 		return
 	if matchKey(getRawHash(msg), subscription.items()):
 		forward(msg)
 
 @log_on_fail(debug_group)
-@itchat.msg_register([SYSTEM], isGroupChat=True)
+@itchat.msg_register([SYSTEM], isGroupChat=False)
 def system(msg):
 	print('system message, looking for join', msg)
 	
