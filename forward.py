@@ -103,8 +103,7 @@ def loopImp():
 	chat = search_result[0]
 	for user in search_result[0].MemberList:
 		if matchKey(user.get('NickName'), ['段誉', '风雨']):
-			print('kick user', chat.get('NickName'), user.get('NickName')) 
-			itchat.delete_member_from_chatroom(chat.UserName, uset.UserName)
+			debug_group.send_message('【注意】【立踢】那个会骂人的又来加群了')
 
 def loop():
 	loopImp()
