@@ -9,6 +9,7 @@ from common import token
 from export_to_telegraph import getTitle
 import os
 import plain_db
+import threading
 
 bot = Updater(token, use_context=True).bot # weixin_subscription_bot 
 debug_group = bot.get_chat(420074357)
@@ -82,7 +83,6 @@ def forward(msg):
 @itchat.msg_register([TEXT, SHARING, PICTURE, RECORDING, 
 	ATTACHMENT, VIDEO], isFriendChat=True)
 def friend(msg):
-	print('friend', msg)
 	forward(msg)
 
 def getRawContent(msg):
@@ -98,10 +98,19 @@ def group(msg):
 		forward(msg)
 
 @log_on_fail(debug_group)
-@itchat.msg_register([SYSTEM], isGroupChat=False)
-def system(msg):
-	print('system message, looking for join', msg)
+def loopImp():
+	search_result = itchat.search_chatrooms('【心理互助】你说我听')
+	chat = search_result[0]
+	for user in search_result[0].MemberList:
+		if matchKey(user.get('NickName'), ['段誉', '风雨']):
+			print('kick user', chat.get('NickName'), user.get('NickName')) 
+			itchat.delete_member_from_chatroom(chat.UserName, uset.UserName)
+
+def loop():
+	loopImp()
+	threading.Timer(60, loop).start()
 	
 if __name__ == '__main__':
 	itchat.auto_login(enableCmdQR=2, hotReload=True)
+	threading.Timer(1, loop).start()
 	itchat.run(True)
