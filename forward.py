@@ -25,6 +25,9 @@ def getPrefix(msg):
 	else:
 		recieve_type = 'from'
 	# TODO: get group name
+	print('\n')
+	print('find group name', msg)
+	print('chatroom', msg.get('Chatroom'))
 	return '%s %s' % (recieve_type, name)
 
 def getRawHash(msg):
