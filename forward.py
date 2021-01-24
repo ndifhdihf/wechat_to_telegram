@@ -30,7 +30,7 @@ def getPrefix(msg):
 def getRawHash(msg):
 	if msg.type == TEXT:
 		return msg.text
-	if msg.type = SHARING:
+	if msg.type == SHARING:
 		return getTitle(msg.Url)
 	return msg.fileName
 
@@ -38,15 +38,15 @@ def getHash(msg):
 	return ''.join(getRawHash(msg).split())[:10]
 
 @log_on_fail(debug_group)
-def sendFile(msg):
+def sendFile(msg, prefix):
 	os.system('mkdir tmp > /dev/null 2>&1')
 	fn = 'tmp/' + msg.fileName
 	r = msg.download(fn)
 	if msg.type != PICTURE:
-		channel.send_document(open(fn, 'rb'), caption=prefix, timeout = 20 * 60)
+		debug_group.send_document(open(fn, 'rb'), caption=prefix, timeout = 20 * 60)
 		return 
 	try:
-		channel.send_photo(open(fn, 'rb'), caption=prefix, timeout = 20 * 60)
+		debug_group.send_photo(open(fn, 'rb'), caption=prefix, timeout = 20 * 60)
 	except Exception as e:
 		if not matchKey(str(e), ['File must be non-empty']):
 			raise e
@@ -61,10 +61,9 @@ def forward(msg):
 		return
 
 	if msg.type in [TEXT, SHARING]:
-		debug_group.send_message('%s: %s' % (prefix, 
-			clearUrl(msg.Url) or msg.text))
+		debug_group.send_message('%s: %s' % (prefix, clearUrl(msg.Url) or msg.text))
 	else:
-		sendFile(msg)
+		sendFile(msg, prefix)
 		os.system('rm ' + fn)
 
 	existing.add(msg_hash)
