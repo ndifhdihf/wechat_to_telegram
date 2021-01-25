@@ -21,24 +21,18 @@ def decorate(text):
 		return '【%s】 %s' % (getTitle(text), text)
 	return text
 
-def sendMsg(name, msg):
-	users = (itchat.search_friends(name)
-		or itchat.search_friends(remarkName = name)
-		or itchat.search_friends(nickName = name))
-	if not users:
-		debug_group.send_message('No user name: %s' % name)
-		return
+def sendMsg(username, msg):
 	os.system('mkdir tmp > /dev/null 2>&1')
 	if msg.text:
-		itchat.send(decorate(msg.text), toUserName=users[0]['UserName'])
+		itchat.send(decorate(msg.text), toUserName=username)
 	elif msg.photo:
 		file = msg.photo[0].get_file()
 		fn = file.download(cached_url.getFilePath(file.file_path))
-		itchat.send_image(fn, toUserName=users[0]['UserName'])
+		itchat.send_image(fn, toUserName=username)
 	elif msg.document:
 		file = msg.document.get_file()
 		fn = file.download('tmp/' + msg.document.file_name)
-		itchat.send_file(fn, toUserName=users[0]['UserName']) 
+		itchat.send_file(fn, toUserName=username) 
 	else:
 		msg.reply_text('fail to send')
 		return
@@ -50,6 +44,23 @@ def login():
 	if time.time() - last_login_time > 60 * 60:
 		itchat.auto_login(enableCmdQR=2, hotReload=True)
 		last_login_time = time.time()
+
+def getChat(cap):
+	if ' in ' not in cap:
+		name = cap.split(':')[0].lstrip('to').strip()
+		users = (itchat.search_friends(name)
+			or itchat.search_friends(remarkName = name)
+			or itchat.search_friends(nickName = name))
+		if not users:
+			debug_group.send_message('No user name: %s' % name)
+			return
+		return users[0]['UserName']
+	chat = cap.split(':')[0].split(' in ')[-1].strip()
+	chats = itchat.search_chatrooms(chat)
+	if not chats:
+		debug_group.send_message('No chat name: %s' % name)
+		return
+	return chats[0]['UserName']
 
 @log_on_fail(debug_group)
 def reply(update, context):
@@ -64,9 +75,10 @@ def reply(update, context):
 	cap = r_msg.text or r_msg.caption
 	if not cap:
 		return
-	name = cap.split(':')[0].split(' in')[0].lstrip('from').lstrip('to').strip()
 	login()
-	sendMsg(name, msg)
+	username = getChat(cap)
+	if username:
+		sendMsg(username, msg)
 
 if __name__ == '__main__':
 	tele.dispatcher.add_handler(MessageHandler(Filters.private, reply), group = 5)
