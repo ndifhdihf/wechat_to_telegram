@@ -23,20 +23,20 @@ def getPrefix(msg):
 	
 	search_result = itchat.search_friends(userName=msg.FromUserName)
 	if search_result and 'unzhi' in search_result.get('NickName'):
-		recieve_type = 'to'
+		recieve_type = 'to '
 		chat_name = msg.ToUserName
 	else:
-		recieve_type = 'from'
+		recieve_type = ''
 		chat_name = msg.FromUserName
 
 	search_result = itchat.search_chatrooms(userName=chat_name)
 	if not search_result: # private chat
-		return '%s %s' % (recieve_type, name)	
+		return recieve_type + name
 
 	chat = search_result.get('RemarkName') or search_result.get('NickName')
 	if recieve_type == 'to':
 		return 'to ' + chat
-	return 'from %s in %s' % (name, chat)
+	return '%s in %s' % (name, chat)
 
 def getRawHash(msg):
 	if msg.type == TEXT:
@@ -49,9 +49,8 @@ def getHash(msg):
 	return ''.join(getRawHash(msg).split())[:10]
 
 @log_on_fail(debug_group)
-def sendFile(msg, prefix):
+def sendFile(msg, prefix, fn):
 	os.system('mkdir tmp > /dev/null 2>&1')
-	fn = 'tmp/' + msg.fileName
 	r = msg.download(fn)
 	if msg.type != PICTURE:
 		debug_group.send_document(open(fn, 'rb'), caption=prefix, timeout = 20 * 60)
@@ -74,7 +73,8 @@ def forward(msg):
 	if msg.type in [TEXT, SHARING]:
 		debug_group.send_message('%s: %s' % (prefix, clearUrl(msg.Url) or msg.text))
 	else:
-		sendFile(msg, prefix)
+		fn = 'tmp/' + msg.fileName
+		sendFile(msg, prefix, fn)
 		os.system('rm ' + fn)
 
 	existing.add(msg_hash)
