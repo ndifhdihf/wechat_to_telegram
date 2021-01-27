@@ -56,9 +56,7 @@ def getChat(cap):
 			return
 		return users[0]['UserName']
 	chat = cap.split(':')[0].split(' in ')[-1].strip()
-	chats = (itchat.search_chatrooms(chat)
-		or itchat.search_chatrooms(remarkName=chat)
-		or itchat.search_chatrooms(nickName=chat))
+	chats = itchat.search_chatrooms(name = chat)
 	if not chats:
 		debug_group.send_message('No chat name: %s' % chat)
 		return
