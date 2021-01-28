@@ -15,13 +15,15 @@ bot = tele.bot
 debug_group = bot.get_chat(420074357)
 
 last_login_time = 0
+last_chat = None
 
 def decorate(text):
 	if isUrl(text) and len(text.split()) == 1:
 		return '【%s】 %s' % (getTitle(text), text)
 	return text
 
-def sendMsg((nickname, username), msg):
+def sendMsg(chat, msg):
+	nickname, username = chat
 	os.system('mkdir tmp > /dev/null 2>&1')
 	if msg.text:
 		text = decorate(msg.text)
@@ -48,7 +50,7 @@ def login():
 		itchat.auto_login(enableCmdQR=2, hotReload=True)
 		last_login_time = time.time()
 
-def getChat(cap):
+def getChatFromCap(cap):
 	if ' in ' not in cap:
 		name = cap.split(':')[0].lstrip('to').strip()
 		users = (itchat.search_friends(name)
@@ -65,6 +67,16 @@ def getChat(cap):
 		return
 	return chat, chats[0]['UserName']
 
+def getChat(r_msg):
+	global last_chat
+	if not r_msg:
+		return last_chat
+	cap = r_msg.text or r_msg.caption
+	if not cap:
+		return
+	last_chat = getChatFromCap(cap)
+	return last_chat
+
 @log_on_fail(debug_group)
 def reply(update, context):
 	msg = update.effective_message
@@ -72,14 +84,8 @@ def reply(update, context):
 		return
 	if msg.chat_id != debug_group.id:
 		return
-	r_msg = msg.reply_to_message
-	if not r_msg:
-		return
-	cap = r_msg.text or r_msg.caption
-	if not cap:
-		return
 	login()
-	chat = getChat(cap)
+	chat = getChat(msg.reply_to_message)
 	if chat:
 		sendMsg(chat, msg)
 
