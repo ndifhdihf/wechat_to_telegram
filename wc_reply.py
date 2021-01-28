@@ -21,10 +21,14 @@ def decorate(text):
 		return '【%s】 %s' % (getTitle(text), text)
 	return text
 
-def sendMsg(username, msg):
+def sendMsg((nickname, username), msg):
 	os.system('mkdir tmp > /dev/null 2>&1')
 	if msg.text:
-		itchat.send(decorate(msg.text), toUserName=username)
+		text = decorate(msg.text)
+		itchat.send(text, toUserName=username)
+		msg.delete()
+		msg.bot.send_message('to %s: %s' % (nickname, text), disable_web_page_preview=True)
+		return
 	elif msg.photo:
 		file = msg.photo[0].get_file()
 		fn = file.download(cached_url.getFilePath(file.file_path))
@@ -36,8 +40,7 @@ def sendMsg(username, msg):
 	else:
 		msg.reply_text('fail to send')
 		return
-	msg.forward(debug_group.id)
-	msg.delete()
+	msg.reply('to %s: success' % nickname)
 
 def login():
 	global last_login_time
@@ -54,13 +57,13 @@ def getChat(cap):
 		if not users:
 			debug_group.send_message('No user name: %s' % name)
 			return
-		return users[0]['UserName']
+		return name, users[0]['UserName']
 	chat = cap.split(':')[0].split(' in ')[-1].strip()
 	chats = itchat.search_chatrooms(name = chat)
 	if not chats:
 		debug_group.send_message('No chat name: %s' % chat)
 		return
-	return chats[0]['UserName']
+	return chat, chats[0]['UserName']
 
 @log_on_fail(debug_group)
 def reply(update, context):
@@ -76,9 +79,9 @@ def reply(update, context):
 	if not cap:
 		return
 	login()
-	username = getChat(cap)
-	if username:
-		sendMsg(username, msg)
+	chat = getChat(cap)
+	if chat:
+		sendMsg(chat, msg)
 
 if __name__ == '__main__':
 	tele.dispatcher.add_handler(MessageHandler(Filters.private, reply), group = 5)
