@@ -29,7 +29,7 @@ def sendMsg(chat, msg):
 		text = decorate(msg.text)
 		itchat.send(text, toUserName=username)
 		msg.delete()
-		msg.bot.send_message('to %s: %s' % (nickname, text), disable_web_page_preview=True)
+		msg.chat.send_message('to %s: %s' % (nickname, text), disable_web_page_preview=True)
 		return
 	elif msg.photo:
 		file = msg.photo[0].get_file()
