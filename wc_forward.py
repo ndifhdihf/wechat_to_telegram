@@ -96,20 +96,7 @@ def group(msg):
 		return
 	if matchKey(getRawHash(msg), subscription.items()):
 		forward(msg)
-
-@log_on_fail(debug_group)
-def loopImp():
-	search_result = itchat.search_chatrooms('【心理互助】你说我听')
-	chat = search_result[0]
-	for user in search_result[0].MemberList:
-		if matchKey(user.get('NickName'), ['段誉']):
-			debug_group.send_message('【注意】【立踢】那个会骂人的又来加群了', user.get('NickName'))
-
-def loop():
-	loopImp()
-	threading.Timer(60, loop).start()
 	
 if __name__ == '__main__':
 	itchat.auto_login(enableCmdQR=2, hotReload=True)
-	threading.Timer(1, loop).start()
 	itchat.run(True)
